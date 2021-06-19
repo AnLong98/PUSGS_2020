@@ -25,31 +25,26 @@ namespace SmartEnergy.Documents.Services
 
         private readonly DocumentsDbContext _dbContext;
         private readonly ITimeService _timeService;   
-        private readonly IDeviceUsageService _deviceUsageService;
         private readonly ICallService _callService;
         private readonly IMapper _mapper;
-        private readonly IAuthService _authHelperService;
-        private readonly IMailService _mailService;
-        private readonly IConsumerService _consumerService;
+        private readonly IAuthHelperService _authHelperService;
+        //private readonly IMailService _mailService;
 
-
-
-        public IncidentService(DocumentsDbContext dbContext, ITimeService timeService, IDeviceUsageService deviceUsageService,  IMapper mapper, ICallService callService, IAuthService authHelperService, IMailService mailService, IConsumerService consumerService)
+        public IncidentService(DocumentsDbContext dbContext, ITimeService timeService, ICallService callService, IMapper mapper, IAuthHelperService authHelperService)
         {
             _dbContext = dbContext;
             _timeService = timeService;
-            _deviceUsageService = deviceUsageService;
             _callService = callService;
             _mapper = mapper;
             _authHelperService = authHelperService;
-            _mailService = mailService;
-            _consumerService = consumerService;
-
-
         }
 
-           
         
+
+
+
+
+
 
 
         // determine what to delete with incident object
@@ -96,9 +91,9 @@ namespace SmartEnergy.Documents.Services
         public LocationDto GetIncidentLocation(int incidentId)
         {
             //TODO:
-            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
-                                                    .ThenInclude(p => p.Device)
-                                                    .ThenInclude(o => o.Location)
+            Incident incident = _dbContext.Incidents//.Include(x => x.IncidentDevices)
+                                                    //.ThenInclude(p => p.Device)
+                                                    //.ThenInclude(o => o.Location)
                                                     .FirstOrDefault(x => x.ID == incidentId);
             if (incident == null)
                 throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
@@ -106,7 +101,7 @@ namespace SmartEnergy.Documents.Services
             DayPeriod currentDayPeriod = _timeService.GetCurrentDayPeriod();
 
             //Try getting location from devices
-            List<DeviceUsage> devices = new List<DeviceUsage>();
+            /*List<DeviceUsage> devices = new List<DeviceUsage>();
             if (currentDayPeriod == DayPeriod.MORNING)
                 devices = incident.IncidentDevices.OrderByDescending(x => x.Device.Location.MorningPriority).ToList();
             else if (currentDayPeriod == DayPeriod.NOON)
@@ -121,7 +116,7 @@ namespace SmartEnergy.Documents.Services
 
             incident = _dbContext.Incidents.Include(x => x.Calls)
                                                     .ThenInclude(p => p.Location)
-                                                    .FirstOrDefault(x => x.ID == incidentId);
+                                                    .FirstOrDefault(x => x.ID == incidentId);*/
 
             if (incident == null)
                 throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
@@ -129,7 +124,7 @@ namespace SmartEnergy.Documents.Services
             //Try getting location from calls
             foreach (Call c in incident.Calls)
             {
-                return _mapper.Map<LocationDto>(c.Location);
+                //return _mapper.Map<LocationDto>(c.Location);
             }
 
             throw new LocationNotFoundException($"Location does not exist for incident with id {incidentId}");
@@ -238,9 +233,9 @@ namespace SmartEnergy.Documents.Services
 
             int priority = -1;
 
-            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
-                                                     .ThenInclude(p => p.Device)
-                                                     .ThenInclude(o => o.Location)
+            Incident incident = _dbContext.Incidents//.Include(x => x.IncidentDevices)
+                                                    // .ThenInclude(p => p.Device)
+                                                    // .ThenInclude(o => o.Location)
                                                      .FirstOrDefault(x => x.ID == incidentId);
             if (incident == null)
                 throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
@@ -255,7 +250,7 @@ namespace SmartEnergy.Documents.Services
 
 
             //Try getting location from devices
-            foreach (DeviceUsage d in incident.IncidentDevices)
+           /* foreach (DeviceUsage d in incident.IncidentDevices)
             {
                 if (currentDayPeriod == DayPeriod.MORNING)
                     allPriorities.Add(d.Device.Location.MorningPriority);
@@ -264,7 +259,7 @@ namespace SmartEnergy.Documents.Services
                 else
                     allPriorities.Add(d.Device.Location.NightPriority);
 
-            }
+            }*/
 
 
             if (allPriorities.Count != 0)
@@ -540,23 +535,23 @@ namespace SmartEnergy.Documents.Services
         {
             int affectedConsumers = 0;
 
-            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
-                                                   .ThenInclude(p => p.Device)
-                                                   .ThenInclude(o => o.Location)
+            Incident incident = _dbContext.Incidents//.Include(x => x.IncidentDevices)
+                                                  // .ThenInclude(p => p.Device)
+                                                   //.ThenInclude(o => o.Location)
                                                    .FirstOrDefault(x => x.ID == incidentId);
             if (incident == null)
                 throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
             List<string> deviceStreets = new List<string>();
 
-            foreach (DeviceUsage device in incident.IncidentDevices)
+            /*foreach (DeviceUsage device in incident.IncidentDevices)
             {
                 if (!deviceStreets.Contains(device.Device.Location.Street.ToLower().Trim()))
                     deviceStreets.Add(device.Device.Location.Street.ToLower().Trim());
 
-            }
+            }*/
 
-            List<Consumer> consumers = _dbContext.Consumers.Include("Location").ToList();
+            /*List<Consumer> consumers = _dbContext.Consumers.Include("Location").ToList();
 
             foreach(string deviceStreet in deviceStreets)
             {
@@ -565,7 +560,7 @@ namespace SmartEnergy.Documents.Services
                     if (consumer.Location.Street.ToLower().Trim().Equals(deviceStreet))
                         affectedConsumers++;
                 }
-            }
+            }*/
 
            
 
@@ -577,19 +572,20 @@ namespace SmartEnergy.Documents.Services
 
         public List<DeviceDto> GetIncidentDevices(int incidentId)
         {
-            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
-                                                   .ThenInclude(p => p.Device)
-                                                   .ThenInclude(o => o.Location)
+            Incident incident = _dbContext.Incidents//.Include(x => x.IncidentDevices)
+                                                   //.ThenInclude(p => p.Device)
+                                                   //.ThenInclude(o => o.Location)
                                                    .FirstOrDefault(x => x.ID == incidentId);
             if (incident == null)
                 throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
-            List<Device> incidentDevices = new List<Device>();
+            /* List<Device> incidentDevices = new List<Device>();
 
-            foreach (DeviceUsage deviceUsage in incident.IncidentDevices)
-                incidentDevices.Add(deviceUsage.Device);
+             foreach (DeviceUsage deviceUsage in incident.IncidentDevices)
+                 incidentDevices.Add(deviceUsage.Device);*/
 
-            return _mapper.Map<List<DeviceDto>>(incidentDevices);
+            //return _mapper.Map<List<DeviceDto>>(incidentDevices);
+            return null;
 
         }
 
@@ -608,9 +604,9 @@ namespace SmartEnergy.Documents.Services
         {
 
             
-            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
-                                                  .ThenInclude(p => p.Device)
-                                                  .ThenInclude(o => o.Location)
+            Incident incident = _dbContext.Incidents//.Include(x => x.IncidentDevices)
+                                                  //.ThenInclude(p => p.Device)
+                                                  //.ThenInclude(o => o.Location)
                                                   .FirstOrDefault(x => x.ID == incidentId);
             if (incident == null)
                 throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
@@ -618,10 +614,10 @@ namespace SmartEnergy.Documents.Services
 
             List<int> incidentDeviceIds = new List<int>();
 
-            
 
 
-            foreach(DeviceUsage deviceUsage in _dbContext.DeviceUsages.ToList())
+
+            /*foreach(DeviceUsage deviceUsage in _dbContext.DeviceUsages.ToList())
             {
                 if (deviceUsage.IncidentID == incidentId)
                     incidentDeviceIds.Add(deviceUsage.DeviceID);
@@ -650,24 +646,26 @@ namespace SmartEnergy.Documents.Services
                     devicesToReturn.Add(d);
             }
 
-           
+           */
 
-            return _mapper.Map<List<DeviceDto>>(devicesToReturn);
+            // return _mapper.Map<List<DeviceDto>>(devicesToReturn);
+            return null;
         }
 
         public CrewDto GetIncidentCrew(int incidentId)
         {
-            Incident incident = _dbContext.Incidents.Include(x => x.Crew)
-                                                    .ThenInclude(x => x.CrewMembers)
+            Incident incident = _dbContext.Incidents//.Include(x => x.Crew)
+                                                    //.ThenInclude(x => x.CrewMembers)
                                                     .FirstOrDefault(x => x.ID == incidentId);
 
             if (incident == null)
                 throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
-            return _mapper.Map<CrewDto>(incident.Crew);
+            //return _mapper.Map<CrewDto>(incident.Crew);
+            return null;
         }
 
-        private bool CompareLocation(Location location1, Location location2)
+       /* private bool CompareLocation(Location location1, Location location2)
         {
             if( (location1.Zip == location2.Zip) &&
                 (location1.Street.Equals(location2.Street))
@@ -679,13 +677,13 @@ namespace SmartEnergy.Documents.Services
                 return false;
             }
                     
-        }
+        }*/
 
         public CallDto AddIncidentCall(int incidentId, CallDto newCall)
         {
 
-            Incident incident = _dbContext.Incidents.Include(x => x.Crew)
-                                                  .ThenInclude(x => x.CrewMembers)
+            Incident incident = _dbContext.Incidents//.Include(x => x.Crew)
+                                                  //.ThenInclude(x => x.CrewMembers)
                                                   .FirstOrDefault(x => x.ID == incidentId);
 
             if (incident == null)
@@ -708,15 +706,15 @@ namespace SmartEnergy.Documents.Services
                 throw new InvalidCallException("Undefined call reason!");
 
 
-            if (_dbContext.Location.Any(x => x.ID == entity.LocationID) == false)
-                throw new LocationNotFoundException($"Location with id = {entity.LocationID} does not exists!");
+            /*if (_dbContext.Location.Any(x => x.ID == entity.LocationID) == false)
+                throw new LocationNotFoundException($"Location with id = {entity.LocationID} does not exists!");*/
 
 
             if (entity.ConsumerID != 0 && entity.ConsumerID != null)  // ako nije anoniman
             {
 
-                if (_dbContext.Consumers.Any(x => x.ID == entity.ConsumerID) == false)
-                    throw new ConsumerNotFoundException($"Consumer with id = {entity.ConsumerID} does not exists!");
+                /*if (_dbContext.Consumers.Any(x => x.ID == entity.ConsumerID) == false)
+                    throw new ConsumerNotFoundException($"Consumer with id = {entity.ConsumerID} does not exists!");*/
 
             }
         }
@@ -729,9 +727,9 @@ namespace SmartEnergy.Documents.Services
             //    throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
 
-            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
-                                                 .ThenInclude(p => p.Device)
-                                                 .ThenInclude(o => o.Location)
+            Incident incident = _dbContext.Incidents//.Include(x => x.IncidentDevices)
+                                                 //.ThenInclude(p => p.Device)
+                                                 //.ThenInclude(o => o.Location)
                                                  .FirstOrDefault(x => x.ID == incidentId);
             if (incident == null)
                 throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
@@ -741,16 +739,16 @@ namespace SmartEnergy.Documents.Services
           
 
 
-            User user = _dbContext.Users.Find(userId);
-            if (user == null)
-                throw new UserNotFoundException($"User with id {userId} does not exist.");
+           // User user = _dbContext.Users.Find(userId);
+            //if (user == null)
+               // throw new UserNotFoundException($"User with id {userId} does not exist.");
 
             incident.UserID = userId;
 
 
             int locationId = -1;
 
-            if(incident.IncidentDevices.Count != 0)
+           /* if(incident.IncidentDevices.Count != 0)
             {
                 locationId = incident.IncidentDevices[0].Device.LocationID;
             }
@@ -760,7 +758,7 @@ namespace SmartEnergy.Documents.Services
             foreach(Consumer c in consumers)
             {
                 _mailService.SendMail(c.User.Email, "Solving incident", "Problem will be solved as soon as possible. We are working!");
-            }
+            }*/
 
 
            
@@ -779,7 +777,8 @@ namespace SmartEnergy.Documents.Services
 
         public IncidentListDto GetIncidentsPaged(IncidentFields sortBy, SortingDirection direction, int page, int perPage, IncidentFilter filter, OwnerFilter owner, string searchParam, ClaimsPrincipal user)
         {
-            IQueryable<Incident> incidents = _dbContext.Incidents.Include(x => x.User).AsQueryable();
+            IQueryable<Incident> incidents = _dbContext.Incidents//.Include(x => x.User)
+                                                                 .AsQueryable();
 
             incidents = FilterIncidents(incidents, filter);
             incidents = FilterIncidentsByOwner(incidents, owner, user);
@@ -828,7 +827,7 @@ namespace SmartEnergy.Documents.Services
         {
             int userId = _authHelperService.GetUserIDFromPrincipal(user);
             if (owner == OwnerFilter.mine)
-                incidents = incidents.Where(x => x.User.ID == userId);
+                incidents = incidents.Where(x => x.UserID == userId);
 
             return incidents;
         }

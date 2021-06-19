@@ -16,17 +16,17 @@ export class UserService {
   constructor(private http: HttpClient) { }
   
   getAllUnassignedCrewMembers():Observable<User[]>{
-    let requestUrl = environment.serverURL.concat("users/unassigned-crew-members");
+    let requestUrl = environment.usersServerURL.concat("users/unassigned-crew-members");
     return this.http.get<User[]>(requestUrl);
   }
 
   getAllUsers():Observable<User[]>{
-    let requestUrl = environment.serverURL.concat("users/all");
+    let requestUrl = environment.usersServerURL.concat("users/all");
     return this.http.get<User[]>(requestUrl);
   }
 
   getUsersPaged( page: number, perPage:number,sort?: string, order?: string, userType?:string, searchParam?:string, userStatus?:string):Observable<UsersList>{
-    let requestUrl = environment.serverURL.concat("users");
+    let requestUrl = environment.usersServerURL.concat("users");
     let params = new HttpParams();
     if(sort)
       params = params.append('sortBy', sort);
@@ -44,27 +44,27 @@ export class UserService {
   }
 
   approveUser(id:number):Observable<User>{
-    let requestUrl = environment.serverURL.concat(`users/${id}/approve`);
+    let requestUrl = environment.usersServerURL.concat(`users/${id}/approve`);
     return this.http.put<User>(requestUrl, {});
   }
 
   denyUser(id:number):Observable<User>{
-    let requestUrl = environment.serverURL.concat(`users/${id}/deny`);
+    let requestUrl = environment.usersServerURL.concat(`users/${id}/deny`);
     return this.http.put<User>(requestUrl, {});
   }
 
   createUser(user:User):Observable<User>{
-    let requestUrl = environment.serverURL.concat(`users`);
+    let requestUrl = environment.usersServerURL.concat(`users`);
     return this.http.post<User>(requestUrl, user);
   }
 
   getById(id:number):Observable<User>{
-    let requestUrl = environment.serverURL.concat(`users/${id}`);
+    let requestUrl = environment.usersServerURL.concat(`users/${id}`);
     return this.http.get<User>(requestUrl);
   }
 
   uploadAvatar(file: File, userId:number): Observable<HttpEvent<any>> {
-    let requestUrl = environment.serverURL.concat(`users/${userId}/avatar`);
+    let requestUrl = environment.documentsServerURL.concat(`multimedia/users/${userId}/avatar`);
     const formData: FormData = new FormData();
 
     formData.append('file', file);
@@ -78,17 +78,17 @@ export class UserService {
   }
 
   getUserAvatar(userId:number, filename:string): Observable<any> {
-    let requestUrl = environment.serverURL.concat(`users/${userId}/avatar/${filename}`);
+    let requestUrl = environment.documentsServerURL.concat(`multimedia/users/${userId}/avatar/${filename}`);
 		return this.http.get(requestUrl, {responseType: 'blob'});
   }
 
   login(credentials:Login):Observable<any>{
-    let requestUrl = environment.serverURL.concat(`users/login`);
+    let requestUrl = environment.usersServerURL.concat(`users/login`);
     return this.http.post<any>(requestUrl, credentials);
   }
 
   loginExternal(credentials:ExternalAuth):Observable<LoginResponse>{
-    let requestUrl = environment.serverURL.concat(`users/external-login`);
+    let requestUrl = environment.usersServerURL.concat(`users/external-login`);
     return this.http.post<LoginResponse>(requestUrl, credentials);
   }
 

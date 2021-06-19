@@ -7,8 +7,8 @@ using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Enums;
 using SmartEnergy.Contract.Interfaces;
+using SmartEnergy.Documents.DomainModels;
 using SmartEnergy.Infrastructure;
-using SmartEnergyDomainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,18 +23,18 @@ namespace SmartEnergy.Documents.Services
         private readonly DocumentsDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IIncidentService _incidentService;
-        private readonly IDeviceUsageService _deviceUsageService;
-        private readonly IAuthService _authHelperService;
+        //private readonly IDeviceUsageService _deviceUsageService;
+        private readonly IAuthHelperService _authHelperService;
         private readonly IMultimediaService _multimediaService;
 
         public WorkRequestService(DocumentsDbContext dbContext, IMapper mapper,
-            IIncidentService incidentService, IDeviceUsageService deviceUsageService,
-            IAuthService authHelperService, IMultimediaService multimedia)
+            IIncidentService incidentService,
+            IAuthHelperService authHelperService, IMultimediaService multimedia)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _incidentService = incidentService;
-            _deviceUsageService = deviceUsageService;
+            //_deviceUsageService = deviceUsageService;
             _authHelperService = authHelperService;
             _multimediaService = multimedia;
         }
@@ -49,7 +49,7 @@ namespace SmartEnergy.Documents.Services
                                                     .ThenInclude( x => x.MultimediaAttachments)
                                                     .Include(x => x.NotificationsAnchor)
                                                     .Include(x => x.StateChangeAnchor)
-                                                    .Include( x => x.DeviceUsage)
+                                                    //.Include( x => x.DeviceUsage)
                                                     .FirstOrDefault( x=> x.ID == id);
             if (wr == null)
                 throw new WorkRequestNotFound($"Work request with id {id} does not exist.");
@@ -90,24 +90,26 @@ namespace SmartEnergy.Documents.Services
 
         public List<DeviceDto> GetWorkRequestDevices(int workRequestId)
         {
-            WorkRequest workRequest = _dbContext.WorkRequests.Include(x => x.DeviceUsage)
-                                                             .ThenInclude(x => x.Device)
-                                                             .ThenInclude(x => x.Location)
+            WorkRequest workRequest = _dbContext.WorkRequests//.Include(x => x.DeviceUsage)
+                                                             //.ThenInclude(x => x.Device)
+                                                             //.ThenInclude(x => x.Location)
                                                              .FirstOrDefault(x => x.ID == workRequestId);
             if (workRequest == null)
                 throw new WorkRequestNotFound($"Work request with id {workRequestId} does not exist.");
 
-            List<Device> devices = new List<Device>();
+            /*List<Device> devices = new List<Device>();
             foreach (DeviceUsage d in workRequest.DeviceUsage)
-                devices.Add(d.Device);
+                devices.Add(d.Device);*/
 
-            return _mapper.Map<List<DeviceDto>>(devices);
+            //return _mapper.Map<List<DeviceDto>>(devices);
+            return null;
         }
 
         public WorkRequestsListDto GetWorkRequestsPaged(WorkRequestField sortBy, SortingDirection direction, int page, int perPage,
             DocumentStatusFilter status, OwnerFilter owner, string searchParam, ClaimsPrincipal user)
         {
-            IQueryable<WorkRequest> wrPaged = _dbContext.WorkRequests.Include(x => x.User).AsQueryable();
+            IQueryable<WorkRequest> wrPaged = _dbContext.WorkRequests//.Include(x => x.User)
+                                                                     .AsQueryable();
 
             wrPaged = FilterWorkRequestsByStatus(wrPaged, status);
             wrPaged = FilterWorkRequestsByOwner(wrPaged, owner, user);
@@ -156,7 +158,7 @@ namespace SmartEnergy.Documents.Services
 
             _dbContext.SaveChanges();
 
-            _deviceUsageService.CopyIncidentDevicesToWorkRequest(workRequest.IncidentID, workRequest.ID);
+            //_deviceUsageService.CopyIncidentDevicesToWorkRequest(workRequest.IncidentID, workRequest.ID);
 
             return _mapper.Map<WorkRequestDto>(workRequest);
         }
@@ -184,8 +186,8 @@ namespace SmartEnergy.Documents.Services
                 throw new IncidentNotFoundException($"Attached incident with id {entity.IncidentID} does not exist.");
             }
 
-            if(_dbContext.Users.Find(entity.UserID) == null)
-                throw new UserNotFoundException($"Attached user with id {entity.UserID} does not exist.");
+            /*if(_dbContext.Users.Find(entity.UserID) == null)
+                throw new UserNotFoundException($"Attached user with id {entity.UserID} does not exist.");*/
 
             WorkRequest wr = _dbContext.WorkRequests.FirstOrDefault(x => x.IncidentID == entity.IncidentID);
             if (wr != null && wr.ID != entity.ID )
@@ -251,8 +253,8 @@ namespace SmartEnergy.Documents.Services
         private IQueryable<WorkRequest> FilterWorkRequestsByOwner(IQueryable<WorkRequest> wr, OwnerFilter owner, ClaimsPrincipal user)
         {
             int userId = _authHelperService.GetUserIDFromPrincipal(user);
-            if (owner == OwnerFilter.mine)
-                wr = wr.Where(x => x.User.ID == userId);
+           /* if (owner == OwnerFilter.mine)
+                wr = wr.Where(x => x.User.ID == userId);*/
             return wr;
         }
 
@@ -265,7 +267,7 @@ namespace SmartEnergy.Documents.Services
             return wr.Where(x => x.Street.Contains(searchParam) ||
                                                x.StartDate.ToString().Contains(searchParam) ||
                                                x.EndDate.ToString().Contains(searchParam) ||
-                                               x.User.Username.Contains(searchParam) ||
+                                               //x.User.Username.Contains(searchParam) ||
                                                x.CompanyName.Contains(searchParam) ||
                                                x.Phone.Contains(searchParam) ||
                                                x.CreatedOn.ToString().Contains(searchParam));
@@ -282,8 +284,8 @@ namespace SmartEnergy.Documents.Services
                         return wr.OrderBy(x => x.ID);
                     case WorkRequestField.company:
                         return wr.OrderBy(x => x.CompanyName);
-                    case WorkRequestField.createdby:
-                        return wr.OrderBy(x => x.User.Username);
+                    /*case WorkRequestField.createdby:
+                        return wr.OrderBy(x => x.User.Username);*/
                     case WorkRequestField.creationdate:
                         return wr.OrderBy(x => x.CreatedOn);
                     case WorkRequestField.emergency:
@@ -313,8 +315,8 @@ namespace SmartEnergy.Documents.Services
                         return wr.OrderByDescending(x => x.ID);
                     case WorkRequestField.company:
                         return wr.OrderByDescending(x => x.CompanyName);
-                    case WorkRequestField.createdby:
-                        return wr.OrderByDescending(x => x.User.Username);
+                    //case WorkRequestField.createdby:
+                      //  return wr.OrderByDescending(x => x.User.Username);
                     case WorkRequestField.creationdate:
                         return wr.OrderByDescending(x => x.CreatedOn);
                     case WorkRequestField.emergency:
@@ -360,14 +362,14 @@ namespace SmartEnergy.Documents.Services
         public bool IsCrewMemberHandlingWorkRequest(int crewMemberId, int workRequestId)
         {
             WorkRequest wr = _dbContext.WorkRequests.Include(x => x.Incident)
-                                                    .ThenInclude(x => x.Crew)
-                                                    .ThenInclude(x => x.CrewMembers)
+                                                    //.ThenInclude(x => x.Crew)
+                                                    //.ThenInclude(x => x.CrewMembers)
                                                     .FirstOrDefault(x => x.ID == workRequestId);
             if(wr == null)
                 throw new WorkRequestNotFound($"Work request with id {workRequestId} does not exist");
 
-            if (wr.Incident.Crew.CrewMembers.FirstOrDefault(x => x.ID == crewMemberId) == null)
-                return false;
+            /*if (wr.Incident.Crew.CrewMembers.FirstOrDefault(x => x.ID == crewMemberId) == null)
+                return false;*/
 
             return true;
 

@@ -5,8 +5,8 @@ using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Enums;
 using SmartEnergy.Contract.Interfaces;
+using SmartEnergy.Documents.DomainModels;
 using SmartEnergy.Infrastructure;
-using SmartEnergyDomainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +19,9 @@ namespace SmartEnergy.Documents.Services
     {
         private readonly DocumentsDbContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly IAuthService _authHelperService;
+        private readonly IAuthHelperService _authHelperService;
 
-        public StateChangeService(DocumentsDbContext dbContext, IMapper mapper, IAuthService authHelperService)
+        public StateChangeService(DocumentsDbContext dbContext, IMapper mapper, IAuthHelperService authHelperService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -226,7 +226,7 @@ namespace SmartEnergy.Documents.Services
         {
             SafetyDocument sd = _dbContext.SafetyDocuments.Include(x => x.StateChangeAnchor)
                                                              .ThenInclude(x => x.StateChangeHistories)
-                                                             .ThenInclude(x => x.User)
+                                                             //.ThenInclude(x => x.User)
                                                              .FirstOrDefault(x => x.ID == safetyDocId);
 
             if (sd == null)
@@ -239,7 +239,7 @@ namespace SmartEnergy.Documents.Services
         {
             WorkRequest workRequest = _dbContext.WorkRequests.Include(x => x.StateChangeAnchor)
                                                              .ThenInclude(x => x.StateChangeHistories)
-                                                             .ThenInclude(x => x.User)
+                                                             //.ThenInclude(x => x.User)
                                                              .FirstOrDefault(x => x.ID == workRequestId);
 
             if (workRequest == null)

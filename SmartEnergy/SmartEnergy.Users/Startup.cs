@@ -90,8 +90,11 @@ namespace SmartEnergy.Users
             services.AddCors(options =>
             {
                 options.AddPolicy(name: _cors, builder => {
-                    builder.WithOrigins("https://localhost:4200", "http://localhost:4200").AllowAnyHeader()
-                                        .AllowAnyMethod().AllowCredentials();
+                    // builder.WithOrigins("https://localhost:4200", "http://localhost:4200").AllowAnyHeader()
+                    //.AllowAnyMethod().AllowCredentials();
+                    builder.AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .AllowCredentials();
                 });
             });
 
@@ -123,7 +126,7 @@ namespace SmartEnergy.Users
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseCors(_cors);
 
             app.UseRouting();
@@ -145,21 +148,22 @@ namespace SmartEnergy.Users
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                try
+                bool migrated = false;
+                int attempts = 3;
+                while (!migrated && attempts > 0)
                 {
-                    var context = serviceScope.ServiceProvider.GetService<UsersDbContext>();
-                    Thread.Sleep(60000);
-                    InitDb(context);
-                }
-                catch //Catch if too soon initing
-                {
-                    var context = serviceScope.ServiceProvider.GetService<UsersDbContext>();
-                    Thread.Sleep(120000);
-                    InitDb(context);
+                    try
+                    {
+                        var context = serviceScope.ServiceProvider.GetService<UsersDbContext>();
+                        Thread.Sleep(60000);
+                        InitDb(context);
+                        migrated = true;
+                    }
+                    catch //Catch if too soon initing
+                    {
+                        attempts--;
 
-                    //Give up on life if this doesn't work 
-
-
+                    }
                 }
 
 

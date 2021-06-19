@@ -13,7 +13,7 @@ export class CrewService {
   constructor(private http: HttpClient) { }
 
   getCrewsPaged(sort: string, order: string, page: number, perPage:number):Observable<CrewsList>{
-    let requestUrl = environment.serverURL.concat("crews");
+    let requestUrl = environment.usersServerURL.concat("crews");
     let params = new HttpParams();
     params = params.append('sortBy', sort);
     params = params.append('direction', order);
@@ -23,27 +23,27 @@ export class CrewService {
   }
 
   getAllCrews():Observable<Crew[]>{
-    let requestUrl = environment.serverURL.concat("crews/all");
+    let requestUrl = environment.usersServerURL.concat("crews/all");
     return this.http.get<Crew[]>(requestUrl);
   }
 
   getCrewById(id:number):Observable<Crew>{
-    let requestUrl = environment.serverURL.concat(`crews/${id}`);
+    let requestUrl = environment.usersServerURL.concat(`crews/${id}`);
     return this.http.get<Crew>(requestUrl);
   }
 
   createNewCrew(crew:Crew):Observable<Crew>{
-    let requestUrl = environment.serverURL.concat("crews");
+    let requestUrl = environment.usersServerURL.concat("crews");
     return this.http.post<Crew>(requestUrl, crew);
   }
 
   updateCrew(crew:Crew):Observable<Crew>{
-    let requestUrl = environment.serverURL.concat(`crews/${crew.id}`);
+    let requestUrl = environment.usersServerURL.concat(`crews/${crew.id}`);
     return this.http.put<Crew>(requestUrl, crew);
   }
 
   deleteCrew(id:number):Observable<{}>{
-    let requestUrl = environment.serverURL.concat(`crews/${id}`);
+    let requestUrl = environment.usersServerURL.concat(`crews/${id}`);
     return this.http.delete(requestUrl);
   }
 }

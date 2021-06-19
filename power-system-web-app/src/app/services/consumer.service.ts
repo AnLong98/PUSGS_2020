@@ -13,7 +13,7 @@ export class ConsumerService {
 
  
   GetConsumers():Observable<Consumer[]>{
-    let requestUrl = environment.serverURL.concat("consumers");
+    let requestUrl = environment.usersServerURL.concat("consumers");
     return this.http.get<Consumer[]>(requestUrl);
   }
 }

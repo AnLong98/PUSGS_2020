@@ -3,7 +3,6 @@ using SmartEnergy.Contract.CustomExceptions.SafetyDocument;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Interfaces;
 using SmartEnergy.Infrastructure;
-using SmartEnergyDomainModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,6 +13,7 @@ using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using SmartEnergy.Documents.DomainModels;
 
 namespace SmartEnergy.Documents.Services
 {
@@ -24,15 +24,14 @@ namespace SmartEnergy.Documents.Services
 
         private readonly DocumentsDbContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly IDeviceUsageService _deviceUsageService;
-        private readonly IAuthService _authHelperService;
+       // private readonly IDeviceUsageService _deviceUsageService;
+        private readonly IAuthHelperService _authHelperService;
 
 
-        public SafetyDocumentService(DocumentsDbContext dbContext, IMapper mapper, IDeviceUsageService deviceUsageService, IAuthService authHelperService)
+        public SafetyDocumentService(DocumentsDbContext dbContext, IMapper mapper, IAuthHelperService authHelperService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
-            _deviceUsageService = deviceUsageService;
             _authHelperService = authHelperService;
         }
 
@@ -43,7 +42,8 @@ namespace SmartEnergy.Documents.Services
 
         public SafetyDocumentDto Get(int id)
         {
-            SafetyDocument safetyDocument = _dbContext.SafetyDocuments.Include(x => x.User).FirstOrDefault(x => x.ID.Equals(id));
+            SafetyDocument safetyDocument = _dbContext.SafetyDocuments//.Include(x => x.User)
+                                                                      .FirstOrDefault(x => x.ID.Equals(id));
 
             if (safetyDocument == null)
                 throw new SafetyDocumentNotFoundException($"Safety document with id {id} does not exist.");
@@ -63,7 +63,8 @@ namespace SmartEnergy.Documents.Services
 
         public List<SafetyDocumentDto> GetAll()
         {
-            List<SafetyDocumentDto> allSafetDocuments = _mapper.Map<List<SafetyDocumentDto>>(_dbContext.SafetyDocuments.Include(x => x.User).ToList());
+            List<SafetyDocumentDto> allSafetDocuments = _mapper.Map<List<SafetyDocumentDto>>(_dbContext.SafetyDocuments//.Include(x => x.User)
+                                                                                                                       .ToList());
 
             foreach(SafetyDocumentDto sf in allSafetDocuments)
             {
@@ -84,7 +85,8 @@ namespace SmartEnergy.Documents.Services
         public List<SafetyDocumentDto> GetAllMineSafetyDocuments(OwnerFilter owner, ClaimsPrincipal user)
         {
 
-            List<SafetyDocumentDto> allSafetDocuments = _mapper.Map<List<SafetyDocumentDto>>(_dbContext.SafetyDocuments.Include(x => x.User).ToList());
+            List<SafetyDocumentDto> allSafetDocuments = _mapper.Map<List<SafetyDocumentDto>>(_dbContext.SafetyDocuments//.Include(x => x.User)
+                                                                                                                       .ToList());
 
             foreach (SafetyDocumentDto sf in allSafetDocuments)
             {
@@ -113,29 +115,31 @@ namespace SmartEnergy.Documents.Services
             SafetyDocument sf = _dbContext.SafetyDocuments.Include(x => x.WorkPlan)
                                                    .ThenInclude(x => x.WorkRequest)
                                                    .ThenInclude(x => x.Incident)
-                                                   .ThenInclude(x => x.Crew)
+                                                   //.ThenInclude(x => x.Crew)
                                                    .FirstOrDefault(x => x.ID == safetyDocumentId);
 
             if (sf == null)
                 throw new SafetyDocumentNotFoundException($"Safety document with id {safetyDocumentId} does not exist.");
 
-            return _mapper.Map<CrewDto>(sf.WorkPlan.WorkRequest.Incident.Crew);
+            // return _mapper.Map<CrewDto>(sf.WorkPlan.WorkRequest.Incident.Crew);
+            return null;
         }
 
         public List<DeviceDto> GetSafetyDocumentDevices(int safetyDocumentId)
         {
-            SafetyDocument sf = _dbContext.SafetyDocuments.Include(x => x.DeviceUsages)
-                                                             .ThenInclude(x => x.Device)
-                                                             .ThenInclude(x => x.Location)
+            SafetyDocument sf = _dbContext.SafetyDocuments//.Include(x => x.DeviceUsages)
+                                                            // .ThenInclude(x => x.Device)
+                                                            // .ThenInclude(x => x.Location)
                                                              .FirstOrDefault(x => x.ID == safetyDocumentId);
             if (sf == null)
                 throw new SafetyDocumentNotFoundException($"Safety document with id {safetyDocumentId} does not exist.");
 
-            List<Device> devices = new List<Device>();
-            foreach (DeviceUsage d in sf.DeviceUsages)
-                devices.Add(d.Device);
+            /* List<Device> devices = new List<Device>();
+             foreach (DeviceUsage d in sf.DeviceUsages)
+                 devices.Add(d.Device);*/
 
-            return _mapper.Map<List<DeviceDto>>(devices);
+            //return _mapper.Map<List<DeviceDto>>(devices);
+            return null;
         }
 
         public SafetyDocumentDto Insert(SafetyDocumentDto entity)
@@ -162,7 +166,7 @@ namespace SmartEnergy.Documents.Services
 
             SafetyDocument safetyDocument = _mapper.Map<SafetyDocument>(entity);
             safetyDocument.ID = 0;
-            safetyDocument.User = null;
+            //safetyDocument.User = null;
             safetyDocument.MultimediaAnchor = mAnchor;        
             safetyDocument.StateChangeAnchor = sAnchor;
             safetyDocument.DocumentStatus = DocumentStatus.DRAFT;
@@ -172,7 +176,7 @@ namespace SmartEnergy.Documents.Services
 
             _dbContext.SaveChanges();
 
-            _deviceUsageService.CopyIncidentDevicesToSafetyDocument(safetyDocument.WorkPlanID, safetyDocument.ID);
+            //_deviceUsageService.CopyIncidentDevicesToSafetyDocument(safetyDocument.WorkPlanID, safetyDocument.ID);
 
             return _mapper.Map<SafetyDocumentDto>(safetyDocument);
         }
@@ -232,8 +236,8 @@ namespace SmartEnergy.Documents.Services
                 throw new WorkPlanNotFoundException($"Attached work plan with id {entity.WorkPlanID} does not exist.");
             }
 
-            if (_dbContext.Users.Find(entity.UserID) == null)
-                throw new UserNotFoundException($"Attached user with id {entity.UserID} does not exist.");
+            /*if (_dbContext.Users.Find(entity.UserID) == null)
+                throw new UserNotFoundException($"Attached user with id {entity.UserID} does not exist.");*/
 
             if (!Enum.IsDefined(typeof(DocumentStatus), entity.DocumentStatus))
                 throw new InvalidSafetyDocumentException("Undefined document status!");

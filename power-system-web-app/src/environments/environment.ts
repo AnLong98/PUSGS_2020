@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  serverURL : "https://localhost:44372/api/",
+  usersServerURL : "http://localhost:44372/api/",
+  physicalServerURL : "http://localhost:44373/api/",
+  documentsServerURL : "http://localhost:44374/api/",
 };
 
 /*

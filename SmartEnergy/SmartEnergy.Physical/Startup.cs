@@ -115,7 +115,7 @@ namespace SmartEnergy.Physical
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseCors(_cors);
 
             app.UseRouting();
@@ -137,22 +137,22 @@ namespace SmartEnergy.Physical
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-
-                
-                try
+                bool migrated = false;
+                int attempts = 3;
+                while (!migrated && attempts >0)
                 {
-                    var context = serviceScope.ServiceProvider.GetService<PhysicalDbContext>();
-                    Thread.Sleep(60000);
-                    InitDb(context);
-                }catch //Catch if too soon initing
-                {
-                    var context = serviceScope.ServiceProvider.GetService<PhysicalDbContext>();
-                    Thread.Sleep(120000);
-                    InitDb(context);
 
-                    //Give up on life if this doesn't work 
-
-
+                    try
+                    {
+                        var context = serviceScope.ServiceProvider.GetService<PhysicalDbContext>();
+                        Thread.Sleep(60000);
+                        InitDb(context);
+                        migrated = true;
+                    }
+                    catch //Catch if too soon initing
+                    {
+                        attempts--;
+                    }
                 }
             }
         }

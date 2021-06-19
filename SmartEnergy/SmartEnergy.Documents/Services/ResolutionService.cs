@@ -3,13 +3,13 @@ using SmartEnergy.Contract.CustomExceptions.Resolution;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Interfaces;
 using SmartEnergy.Infrastructure;
-using SmartEnergyDomainModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using SmartEnergy.Contract.Enums;
 using SmartEnergy.Contract.CustomExceptions.Incident;
+using SmartEnergy.Documents.DomainModels;
 
 namespace SmartEnergy.Documents.Services
 {

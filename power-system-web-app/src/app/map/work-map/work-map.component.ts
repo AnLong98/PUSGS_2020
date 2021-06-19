@@ -61,8 +61,8 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
   {
     this.deviceService.getAllDevices().subscribe(
       data =>{
-        this.devices = data;
-        this.addDeviceMarkers(data);
+        this.devices = data.result;
+        this.addDeviceMarkers(data.result);
       },
       error=>{
         this.toastr.error("Cannot load devices","", {positionClass: 'toast-bottom-left'}); 
@@ -74,8 +74,8 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
   {
     this.incidentService.getUnresolvedIncidents().subscribe(
       data=>{
-          this.incidents = data;
-          this.addIncidentCrewMarkers(data);
+          this.incidents = data.result;
+          this.addIncidentCrewMarkers(data.result);
       },
       error=>{
          this.toastr.error("Cannot load incidents","", {positionClass: 'toast-bottom-left'}); 

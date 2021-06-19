@@ -19,17 +19,17 @@ export class IncidentService implements IMultimediaService {
 
   constructor(private http: HttpClient) { }
   downloadAttachment(documentId: number, filename: string): Observable<any> {
-    let requestUrl = environment.serverURL.concat(`incidents/${documentId}/attachments/${filename}`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${documentId}/attachments/${filename}`);
 		return this.http.get(requestUrl, {responseType: 'blob'});
   }
 
   getAttachments(documentId: number): Observable<MultimediaAttachment[]> {
-    let requestUrl = environment.serverURL.concat(`incidents/${documentId}/attachments`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${documentId}/attachments`);
 		return this.http.get<MultimediaAttachment[]>(requestUrl);
   }
 
   uploadAttachment(file: File, documentId: number): Observable<HttpEvent<any>> {
-    let requestUrl = environment.serverURL.concat(`incidents/${documentId}/attachments`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${documentId}/attachments`);
     const formData: FormData = new FormData();
 
     formData.append('file', file);
@@ -43,20 +43,20 @@ export class IncidentService implements IMultimediaService {
   }
 
   deleteAttachment(filename: string, documentId: number): Observable<any> {
-    let requestUrl = environment.serverURL.concat(`incidents/${documentId}/attachments/${filename}`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${documentId}/attachments/${filename}`);
     return this.http.delete(requestUrl);
   }
 
 
 
   getAllIncidents():Observable<Incident[]>{
-    let requestUrl = environment.serverURL.concat("incidents/all");
+    let requestUrl = environment.documentsServerURL.concat("incidents/all");
     return this.http.get<Incident[]>(requestUrl);
   }
 
   getIncidentsPaged( page: number, perPage:number,sort?: string, order?: string, filter?:string, searchParam?:string, documentOwner?:string):Observable<IncidentList>{
    
-    let requestUrl = environment.serverURL.concat("incidents");
+    let requestUrl = environment.documentsServerURL.concat("incidents");
     let params = new HttpParams();
 
     if(sort)
@@ -82,34 +82,34 @@ export class IncidentService implements IMultimediaService {
 
 
   getIncidentById(id:number):Observable<Incident>{
-    let requestUrl = environment.serverURL.concat(`incidents/${id}`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${id}`);
     return this.http.get<Incident>(requestUrl);
   }
 
   createNewIncident(incident:Incident):Observable<Incident>{
     console.log(incident)
-    let requestUrl = environment.serverURL.concat("incidents");
+    let requestUrl = environment.documentsServerURL.concat("incidents");
     return this.http.post<Incident>(requestUrl, incident);
   }
 
   updateIncident(incident: Incident):Observable<Incident>{
-    let requestUrl = environment.serverURL.concat(`incidents/${incident.id}`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${incident.id}`);
     return this.http.put<Incident>(requestUrl, incident);
   }
 
   deleteIncident(id:number):Observable<{}>{
-    let requestUrl = environment.serverURL.concat(`incidents/${id}`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${id}`);
     return this.http.delete(requestUrl);
   }
 
   
   getIncidentDevices(incidentId: number):Observable<Device[]>{
-    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/devices`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${incidentId}/devices`);
     return this.http.get<Device[]>(requestUrl);
   }
 
   getUnrelatedDevices(incidentId: number):Observable<Device[]>{
-    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/unrelated-devices`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${incidentId}/unrelated-devices`);
     return this.http.get<Device[]>(requestUrl);
   }
 
@@ -117,7 +117,7 @@ export class IncidentService implements IMultimediaService {
   addDeviceToIncident(incidentId: number, deviceId: number):Observable<Incident>{
    
     let incident: Incident = new Incident();
-    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/device/${deviceId}`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${incidentId}/device/${deviceId}`);
     return this.http.post<Incident>(requestUrl, incident);                  
   }
 
@@ -125,7 +125,7 @@ export class IncidentService implements IMultimediaService {
   addCrewToIncident(incidentId: number, crewId: number):Observable<Incident>{
    
     let incident: Incident = new Incident();
-    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/crew/${crewId}`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${incidentId}/crew/${crewId}`);
     return this.http.put<Incident>(requestUrl, incident);                
   }
 
@@ -133,7 +133,7 @@ export class IncidentService implements IMultimediaService {
   assignIncidetToUser(incidentId: number, userId: number):Observable<Incident>{
    
     let incident: Incident = new Incident();
-    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/assign/${userId}`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${incidentId}/assign/${userId}`);
     return this.http.put<Incident>(requestUrl, incident);                  
   }
 
@@ -142,7 +142,7 @@ export class IncidentService implements IMultimediaService {
 
 
   getIncidentCrew(incidentId:number):Observable<Crew>{
-    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/crew`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${incidentId}/crew`);
     return this.http.get<Crew>(requestUrl);
   }
 
@@ -151,7 +151,7 @@ export class IncidentService implements IMultimediaService {
 
   removeCrewFromIncidet(incidentId: number):Observable<Incident>{
 
-    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/remove-crew`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${incidentId}/remove-crew`);
     return this.http.put<Incident>(requestUrl, "");  
 
   }
@@ -160,32 +160,32 @@ export class IncidentService implements IMultimediaService {
 
   removeDeviceFromIncident(incidentId: number, deviceId: number):Observable<Incident>{
 
-    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/remove-device/device/${deviceId}`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${incidentId}/remove-device/device/${deviceId}`);
     return this.http.put<Incident>(requestUrl, "");  //////////// proveiti
   }
 
 
   getIncidentCalls(incidentId: number):Observable<Call[]>{
-    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/calls`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${incidentId}/calls`);
     return this.http.get<Call[]>(requestUrl);
   }
 
 
   addIncidentCall(incidentId: number, newCall: Call):Observable<Call>{
     
-    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/calls`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${incidentId}/calls`);
     return this.http.post<Call>(requestUrl, newCall);
   }
 
 
   getNumberOfAffectedConsumers(incidentId: number):Observable<number[]>{
-    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/affected-consumers`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${incidentId}/affected-consumers`);
     return this.http.get<number[]>(requestUrl);
   }
 
 
   getNumberOfIncidentCalls(incidentId: number):Observable<number[]>{
-    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/calls-counter`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${incidentId}/calls-counter`);
     return this.http.get<number[]>(requestUrl);
   }
 
@@ -193,24 +193,24 @@ export class IncidentService implements IMultimediaService {
 
 
   getIncidentsStatistics(userId:number):Observable<IncidentsStatistics>{
-    let requestUrl = environment.serverURL.concat(`incidents/statistics/${userId}`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/statistics/${userId}`);
     return this.http.get<IncidentsStatistics>(requestUrl);
   }
  
  
   //done
   getIncidentLocation(incidentId:number):Observable<Location>{
-    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/location`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/${incidentId}/location`);
     return this.http.get<Location>(requestUrl);
   }
 
   getUnassignedIncidents():Observable<Incident[]>{
-    let requestUrl = environment.serverURL.concat(`incidents/unassigned`);
+    let requestUrl = environment.documentsServerURL.concat(`incidents/unassigned`);
     return this.http.get<Incident[]>(requestUrl);
   }
 
-  getUnresolvedIncidents():Observable<IncidentMapDisplay[]>{
-    let requestUrl = environment.serverURL.concat(`incidents/unresolved`);
-    return this.http.get<IncidentMapDisplay[]>(requestUrl);
+  getUnresolvedIncidents():Observable<any>{
+    let requestUrl = environment.documentsServerURL.concat(`incidents/unresolved`);
+    return this.http.get<any>(requestUrl);
   }
 }

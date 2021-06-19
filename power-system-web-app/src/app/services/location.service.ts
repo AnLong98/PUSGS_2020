@@ -12,7 +12,7 @@ export class LocationService {
   constructor(private http: HttpClient) { }
   
   getAllLocations():Observable<Location[]>{
-    let requestUrl = environment.serverURL.concat("locations");
+    let requestUrl = environment.physicalServerURL.concat("locations");
     return this.http.get<Location[]>(requestUrl);
   }
 }

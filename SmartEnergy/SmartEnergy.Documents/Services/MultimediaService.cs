@@ -11,8 +11,8 @@ using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Enums;
 using SmartEnergy.Contract.Interfaces;
+using SmartEnergy.Documents.DomainModels;
 using SmartEnergy.Infrastructure;
-using SmartEnergyDomainModels;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -138,13 +138,13 @@ namespace SmartEnergy.Documents.Services
         {
             await ScanAttachmentAsync(formFile);
 
-            User user = _dbContext.Users.Find(userId);
+           // User user = _dbContext.Users.Find(userId);
 
             if (!IsImage(formFile))
                 throw new MultimediaNotImageException($"Uploaded file is not an image!");
 
-            if (user == null)
-                throw new UserNotFoundException($"User with ID {userId} does not exist.");
+            /*if (user == null)
+                throw new UserNotFoundException($"User with ID {userId} does not exist.");*/
 
             string filePath = Path.Combine(@$"Attachments/Users/User{userId}/", formFile.FileName);
             if(Directory.Exists(@$"Attachments/Users/User{userId}"))
@@ -159,7 +159,7 @@ namespace SmartEnergy.Documents.Services
 
             }
 
-            user.ImageURL = formFile.FileName;
+            //user.ImageURL = formFile.FileName;
 
             _dbContext.SaveChanges();
         }
@@ -318,12 +318,12 @@ namespace SmartEnergy.Documents.Services
 
         public FileStream GetUserAvatarStream(int userId, string imageURL)
         {
-            User user = _dbContext.Users.Find(userId);
+            /*User user = _dbContext.Users.Find(userId);
             if (user == null)
-                throw new UserNotFoundException($"User with id {userId} does not exist");
+                throw new UserNotFoundException($"User with id {userId} does not exist");*/
 
-            if (user.ImageURL != imageURL)
-                throw new MultimediaNotFoundException($"User does not have profile picture!");
+           /* if (user.ImageURL != imageURL)
+                throw new MultimediaNotFoundException($"User does not have profile picture!");*/
 
             FileStream stream = new FileStream(@$"Attachments/Users/User{userId}/{imageURL}", FileMode.Open);
             return stream;
@@ -434,9 +434,9 @@ namespace SmartEnergy.Documents.Services
 
             try
             {
-                using (var bitmap = new Bitmap(postedFile.OpenReadStream()))
+                /*using (var bitmap = new Bitmap(postedFile.OpenReadStream()))
                 {
-                }
+                }*/
             }
             catch (Exception)
             {

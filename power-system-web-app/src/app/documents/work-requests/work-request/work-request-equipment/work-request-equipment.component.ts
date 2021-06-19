@@ -48,13 +48,9 @@ export class WorkRequestEquipmentComponent implements OnInit, AfterViewInit{
         this.isLoading = false;
       },
       error =>{
-        if(error.error instanceof ProgressEvent)
-          {
-            this.loadDevices(id);
-          }else
-          {
+
             this.toastr.error(error.error);
-          }
+          
       }
     )
   }

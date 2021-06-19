@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using SmartEnergy.Documents.DomainModels;
 using SmartEnergy.Infrastructure.Configurations;
 using System;
@@ -11,6 +13,11 @@ namespace SmartEnergy.Infrastructure
     {
         public DocumentsDbContext(DbContextOptions options) : base(options)
         {
+        }
+
+        public bool Exists()
+        {
+            return (this.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator).Exists();
         }
 
         public DbSet<Call> Calls { get; set; }

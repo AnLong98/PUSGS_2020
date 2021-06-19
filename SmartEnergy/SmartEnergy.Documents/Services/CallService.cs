@@ -2,7 +2,6 @@
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Interfaces;
 using SmartEnergy.Infrastructure;
-using SmartEnergyDomainModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +12,7 @@ using SmartEnergy.Contract.Enums;
 using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.Consumer;
+using SmartEnergy.Documents.DomainModels;
 
 namespace SmartEnergy.Documents.Services
 {
@@ -46,8 +46,8 @@ namespace SmartEnergy.Documents.Services
 
         public List<CallDto> GetAll()
         {
-            return _mapper.Map<List<CallDto>>(_dbContext.Calls.Include(x => x.Location)
-                                                              .ThenInclude(x => x.Consumers)
+            return _mapper.Map<List<CallDto>>(_dbContext.Calls//.Include(x => x.Location)
+                                                              //.ThenInclude(x => x.Consumers)
                                                               .ToList());
         }
 
@@ -60,14 +60,14 @@ namespace SmartEnergy.Documents.Services
                 throw new InvalidCallException("Undefined call reason!");
 
 
-            if (_dbContext.Location.Any(x => x.ID == entity.LocationID) == false)
-                throw new LocationNotFoundException($"Location with id = {entity.LocationID} does not exists!");
+            /*if (_dbContext.Location.Any(x => x.ID == entity.LocationID) == false)
+                throw new LocationNotFoundException($"Location with id = {entity.LocationID} does not exists!");*/
 
 
             if (entity.ConsumerID != 0 && entity.ConsumerID != null)
             {
-                if (_dbContext.Consumers.Any(x => x.ID == entity.ConsumerID) == false)
-                    throw new ConsumerNotFoundException($"Consumer with id = {entity.ConsumerID} does not exists!");
+                /*if (_dbContext.Consumers.Any(x => x.ID == entity.ConsumerID) == false)
+                    throw new ConsumerNotFoundException($"Consumer with id = {entity.ConsumerID} does not exists!");*/
             }else
             {
                 entity.ConsumerID = null;
@@ -77,8 +77,8 @@ namespace SmartEnergy.Documents.Services
             Call newCall = _mapper.Map<Call>(entity);
 
             newCall.ID = 0;
-            newCall.Location = null;
-            newCall.Consumer = null;
+            //newCall.Location = null;
+            //newCall.Consumer = null;
             newCall.Incident = null;
             //newCall.IncidentID = null;
 
@@ -99,7 +99,7 @@ namespace SmartEnergy.Documents.Services
             Call oldCall = _dbContext.Calls.FirstOrDefault(x => x.ID.Equals(updatedCall.ID));
 
 
-            updatedCall.Location = null;
+            //updatedCall.Location = null;
            
             if (oldCall == null)
                 throw new CallNotFoundExcpetion($"Call with Id = {updatedCall.ID} does not exists!");
@@ -112,8 +112,8 @@ namespace SmartEnergy.Documents.Services
 
  
 
-            if (_dbContext.Location.Where(x => x.ID.Equals(updatedCall.LocationID)) == null)
-                throw new LocationNotFoundException($"Location with id = {updatedCall.LocationID} does not exists!");
+            /*if (_dbContext.Location.Where(x => x.ID.Equals(updatedCall.LocationID)) == null)
+                throw new LocationNotFoundException($"Location with id = {updatedCall.LocationID} does not exists!");*/
 
 
             if (_dbContext.Incidents.Where(x => x.ID.Equals(updatedCall.IncidentID)) == null)
