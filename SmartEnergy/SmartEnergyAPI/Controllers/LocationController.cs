@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Interfaces;
 using System;
@@ -27,6 +28,21 @@ namespace SmartEnergyAPI.Controllers
         {
             return Ok(_locationService.GetAllLocations());
         }
-
+        
+        [HttpPost("streets-priorities")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<LocationDto>))]
+        public IActionResult ChangePriorities(List<LocationDto> locations)
+        {
+            try
+            {
+                _locationService.ChangePriorities(locations);
+                return Ok(true);
+            }
+            catch(InvalidLocationException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        
     }
 }

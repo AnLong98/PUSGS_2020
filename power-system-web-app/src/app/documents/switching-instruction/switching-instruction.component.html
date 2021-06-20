@@ -1,12 +1,12 @@
 <div class="d-flex flex-row p-3 my-2 justify-content-between instruction-border">
-    <div class="p-2">1.&nbsp;Close the transformer station door after finishing</div>
-    <div class="p-2">Br-2567</div>
-    <div class="p-2">UNEXECUTED</div>
-    <div class="p-2">
-        <a class="clickable">
+    <div class="p-2">{{instruction.id}}. &nbsp;{{instruction.description}}</div>
+    <div class="p-2">{{instruction.deviceId}}</div>
+    <div class="p-2">{{display.getInstructionStateDisplay(instruction.isExecuted)}}</div>
+    <div class="p-2" >
+        <a class="clickable" [hidden]="instruction.isExecuted" (click)="approveInstruction()">
             <mat-icon>done_outline</mat-icon>
         </a>&nbsp;
-        <a class="clickable">
+        <a class="clickable" (click)="deleteInstruction()">
             <mat-icon>delete</mat-icon>
         </a>
     </div>

@@ -22,5 +22,12 @@ namespace SmartEnergy.Contract.Interfaces
         public SafetyDocumentDto DenySafetyDocument(int safetyDocId, ClaimsPrincipal user);
         public List<StateChangeHistoryDto> GetSafetyDocumentStateHistory(int safetyDocId);
         #endregion
+
+        #region Work Plan
+        public WorkPlanDto ApproveWorkPlan(int workPlanId, ClaimsPrincipal user);
+        public WorkPlanDto CancelWorkPlan(int workPlanId, ClaimsPrincipal user);
+        public WorkPlanDto DenyWorkPlan(int workPlanId, ClaimsPrincipal user);
+        public List<StateChangeHistoryDto> GetWorkPlanStateHistory(int workPlanId);
+        #endregion
     }
 }

@@ -10,5 +10,6 @@ namespace SmartEnergy.Contract.Interfaces
         void CopyIncidentDevicesToWorkRequest(int incidentID, int workRequestID);
 
         public void CopyIncidentDevicesToSafetyDocument(int workPlanId, int safetyDocumentId);
+        public void CopyWorkRequestDevicesToWorkPlan(int workRequestID, int workPlanID);
     }
 }

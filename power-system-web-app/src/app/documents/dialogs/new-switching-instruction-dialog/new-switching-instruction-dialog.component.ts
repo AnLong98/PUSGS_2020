@@ -1,26 +1,14 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { AfterViewInit, Component, Inject, Input, OnInit, ViewChild } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
-  confirmed: string;
-}
-
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
+import { ActivatedRoute } from '@angular/router';
+import { WorkPlanService } from 'app/services/work-plan.service';
+import { Device } from 'app/shared/models/device.model';
+import { Instruction } from 'app/shared/models/instruction.model';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -28,60 +16,67 @@ const NAMES: string[] = [
   templateUrl: './new-switching-instruction-dialog.component.html',
   styleUrls: ['./new-switching-instruction-dialog.component.css']
 })
-export class NewSwitchingInstructionDialogComponent implements OnInit, AfterViewInit  {
+export class NewSwitchingInstructionDialogComponent implements OnInit  {
 
-  displayedColumns: string[] = ['action', 'id', 'type', 'name', 'address', 'coordinates' ];
-  dataSource: MatTableDataSource<UserData>;
+  displayedColumns: string[] = ['action', 'id', 'name', 'deviceType', 'locationId'];
+  dataSource: MatTableDataSource<Device>;
+  selectedDevice:number;
+  devices: Device[] = [];
+  instruction:Instruction = new Instruction();
+  description = "";
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(public dialogRef: MatDialogRef<NewSwitchingInstructionDialogComponent>) {
-
-     // Create 100 users
-     const users = Array.from({length: 30}, (_, k) => createNewUser(k + 1));
-
-     // Assign the data to the data source for the table to render
-     this.dataSource = new MatTableDataSource(users);
-
+  constructor(public dialogRef: MatDialogRef<NewSwitchingInstructionDialogComponent>, private workPlanService:WorkPlanService, private toastr:ToastrService, @Inject(MAT_DIALOG_DATA) public data: any) {
+    
    }
 
+   loadDevices()
+   {
+     this.workPlanService.getWorkPlanDevices(this.data.wpId).subscribe(
+       data =>{
+        this.dataSource = new MatTableDataSource(data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+       },
+       error =>{
+        this.toastr.error(error.error);
+        this.dialogRef.close();
+       }
+     )
+   }
   
+   setValue(id:number)
+   {
+     this.selectedDevice = id
+     console.log(this.selectedDevice);
+   }
    ngOnInit(): void {
-  }
-
-  ngAfterViewInit() {
-
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-
+     this.loadDevices();
   }
 
   onCancelClick(): void {
     this.dialogRef.close();
   }
 
-  onAddEquipment(id:any): void {
-    console.log(`Added ${id}`);
+  onSaveClick(): void{
+    this.instruction.description = this.description;
+    this.instruction.deviceId = this.selectedDevice;
+    this.instruction.isExecuted = false;
+    this.instruction.workPlanId = this.data.wpId;
+    this.workPlanService.addInstruction(this.instruction).subscribe(
+      data =>
+      {
+        this.toastr.success("Successfully added instruction", "", {positionClass: 'toast-bottom-left'});
+        this.onCancelClick();
+      },
+      error => {
+        this.toastr.error(error.error);
+        this.onCancelClick();
+      }
+    )
   }
-
-  onSaveClick(){
-    this.dialogRef.close("Gatovo");
-  }
-
 
 }
 
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-  return {
-    id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))],
-    confirmed: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
-}

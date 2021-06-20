@@ -92,5 +92,19 @@ export class UserService {
     return this.http.post<LoginResponse>(requestUrl, credentials);
   }
 
+  updateUser(user:User):Observable<User>{
+    let requestUrl = environment.serverURL.concat(`users/${user.id}`);
+    return this.http.put<User>(requestUrl, user);
+  }
+
+  changePassword(userId:number, oldPassword:string, newPassword:string):Observable<boolean>{
+    let params = new HttpParams();
+    params = params.append('userId', userId.toString());
+    params = params.append('oldPassword', oldPassword);
+    params = params.append('newPassword', newPassword);
+    let requestUrl = environment.serverURL.concat(`users/change-password`);
+    return this.http.get<boolean>(requestUrl, {params:params})
+
+  }
 
 }

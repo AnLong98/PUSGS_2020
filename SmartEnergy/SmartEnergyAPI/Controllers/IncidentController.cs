@@ -591,6 +591,23 @@ namespace SmartEnergyAPI.Controllers
 
         }
 
+        [HttpGet("report-outage")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult AddReportOutage([FromQuery]string hazard, [FromQuery] string comment, [FromQuery][BindRequired] int locationId, [FromQuery] string callReason)
+        {
+            try
+            {
+                _incidentService.AddReportOutage(hazard, comment, locationId, callReason);
+                return Ok(true);
+            }
+            catch (InvalidCallException notFound)
+            {
+                return NotFound(notFound.Message);
+            }
+        }
+
 
     }
 }

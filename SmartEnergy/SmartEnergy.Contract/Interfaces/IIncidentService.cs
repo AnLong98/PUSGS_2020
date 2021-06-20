@@ -47,7 +47,8 @@ namespace SmartEnergy.Contract.Interfaces
 
          IncidentStatisticsDto GetStatisticsForUser(int userId);
 
-
+         bool AddReportOutage(string hazard, string comment, int locationId, string callReason);
+        //bool AddReportOutage(CallDto report);
 
 
     }

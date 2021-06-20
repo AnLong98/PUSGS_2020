@@ -20,5 +20,12 @@ namespace SmartEnergyDomainModels
         public List<User> Users { get; set; }
         public List<Call> Calls { get; set; }
         public List<Device> Devices { get; set; }
+
+        public void UpdateLocation(Location location)
+        {
+            MorningPriority = location.MorningPriority;
+            NoonPriority = location.NoonPriority;
+            NightPriority = location.NightPriority;
+        }
     }
 }

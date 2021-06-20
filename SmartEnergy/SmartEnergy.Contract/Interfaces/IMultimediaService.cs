@@ -13,19 +13,24 @@ namespace SmartEnergy.Contract.Interfaces
         public Task AttachFileToWorkRequestAsync(IFormFile formFile, int workRequestId);
         public Task AttachFileToIncidentAsync(IFormFile formFile, int incidentId);
         public Task AttachFileToSafetyDocumentAsync(IFormFile formFile, int safetyDocId);
+        public Task AttachFileToWorkPlanAsync(IFormFile formFile, int workPlanId);
         public Task ScanAttachmentAsync(IFormFile formFile);
         public FileStream GetWorkRequestAttachmentStream(int workRequestId, string fileName);
+        public FileStream GetWorkPlanAttachmentStream(int workPlanId, string fileName);
         public FileStream GetIncidentAttachmentStream(int incidentId, string fileName);
         public FileStream GetSafetyDocumentAttachmentStream(int safetyDocId, string fileName);
         public List<MultimediaAttachmentDto> GetWorkRequestAttachments(int workRequestId);
+        public List<MultimediaAttachmentDto> GetWorkPlanAttachments(int workPlanId);
         public List<MultimediaAttachmentDto> GetIncidentAttachments(int incidentId);
         public List<MultimediaAttachmentDto> GetSafetyDocumentAttachments(int safetyDocId);
         public void DeleteWorkRequestAttachment(int workRequestId, string filename);
+        public void DeleteWorkPlanAttachment(int workPlanId, string filename);
         public void DeleteSafetyDocumentAttachment(int safetyDocId, string filename);
         public void DeleteIncidentAttachment(int incidentId, string filename);
         public Task AttachUserAvatar(IFormFile formFile, int userId);
         public FileStream GetUserAvatarStream(int userId, string imageURL);
         public void DeleteWorkRequestFileOnDisk(int workRequestID, string filePath);
+        public void DeleteWorkPlanFileOnDisk(int workPlanID, string filePath);
         public void DeleteIncidentFileOnDisk(int workRequestID, string filePath);
         public void DeleteSafetyDocumentFileOnDisk(int safetyDocID, string filePath);
     }

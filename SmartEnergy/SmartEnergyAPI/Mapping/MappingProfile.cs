@@ -33,6 +33,9 @@ namespace SmartEnergyAPI.Mapping
             CreateMap<LocationDto, Location>();
             CreateMap<Location, LocationDto>();
 
+            CreateMap<InstructionDto, Instruction>();
+            CreateMap<Instruction, InstructionDto>();
+
             CreateMap<MultimediaAttachmentDto, MultimediaAttachment>();
             CreateMap<MultimediaAttachment, MultimediaAttachmentDto>();
 
@@ -102,12 +105,13 @@ namespace SmartEnergyAPI.Mapping
               .ForMember(mem => mem.DocumentStatus, op => op.MapFrom(o => o.DocumentStatus))
               .ForMember(mem => mem.DocumentType, op => op.MapFrom(o => o.DocumentType));
 
+            CreateMap<WorkPlan, WorkPlanDto>()
+                .ForMember(mem => mem.DocumentStatus, op => op.MapFrom(o => o.DocumentStatus))
+                .ForMember(mem => mem.DocumentType, op => op.MapFrom(o => o.DocumentType));
 
-
-
-
-
-
+            CreateMap<WorkPlanDto, WorkPlan>()
+                .ForMember(mem => mem.DocumentStatus, op => op.MapFrom(o => o.DocumentStatus))
+                .ForMember(mem => mem.DocumentType, op => op.MapFrom(o => o.DocumentType));
 
 
         }

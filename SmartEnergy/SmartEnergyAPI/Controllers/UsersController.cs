@@ -263,6 +263,41 @@ namespace SmartEnergyAPI.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        //[Authorize(Roles = "ADMIN", Policy = "ApprovedOnly")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdateUser(int id, [FromBody] UserDto modifiedDevice)
+        {
+            try
+            {
+                UserDto user = _userService.Update(modifiedDevice);
+                return Ok(user);
+            }
+            catch (InvalidUserDataException invalidUser)
+            {
+                return BadRequest(invalidUser.Message);
+            }
+        }
+
+        [HttpGet("change-password")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+       // [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult ChangePassword([FromQuery][BindRequired]int userId, [FromQuery]string oldPassword, [FromQuery]string newPassword)
+        {
+            try
+            {
+                bool user = _userService.ChangePassword(userId, oldPassword, newPassword);
+                return Ok(user);
+            }
+            catch (InvalidUserDataException invalidUser)
+            {
+                return BadRequest(invalidUser.Message);
+            }
+        }
 
     }
 }

@@ -20,5 +20,15 @@ namespace SmartEnergyDomainModels
         public Location Location { get; set; }
         public List<Call> Calls { get; set; }
 
+        public void Update(Consumer newData)
+        {
+            Name = newData.Name;
+            Lastname = newData.Lastname;
+            Phone = newData.Phone;
+            AccountID = newData.AccountID;
+            AccountType = newData.AccountType;
+            LocationID = newData.LocationID;
+        }
+
     }
 }

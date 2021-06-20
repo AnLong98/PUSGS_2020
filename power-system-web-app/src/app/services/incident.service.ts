@@ -213,4 +213,15 @@ export class IncidentService implements IMultimediaService {
     let requestUrl = environment.serverURL.concat(`incidents/unresolved`);
     return this.http.get<IncidentMapDisplay[]>(requestUrl);
   }
+
+  addReportOutage(hazard:string, comment:string, locationId:number, reason:string):Observable<any>{
+    let params = new HttpParams();
+    params = params.append('hazard', hazard);
+    params = params.append('comment', comment);
+    params = params.append('callReason', reason);
+    params = params.append('locationId', locationId.toString());
+    
+    let requestUrl = environment.serverURL.concat(`incidents/report-outage`);
+    return this.http.get<any>(requestUrl, {params:params});
+  }
 }

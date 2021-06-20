@@ -19,5 +19,6 @@ namespace SmartEnergy.Contract.Interfaces
 
         public string Login(LoginDto userInfo, out UserDto user);
         public Task<LoginResponseDto> LoginExternal(ExternalLoginDto userInfo);
+        public bool ChangePassword(int id, string oldPassword, string newPassword);
     }
 }

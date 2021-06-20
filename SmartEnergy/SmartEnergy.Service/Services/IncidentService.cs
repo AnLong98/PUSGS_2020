@@ -940,5 +940,29 @@ namespace SmartEnergy.Service.Services
             return statistics;
 
         }
+
+        public bool AddReportOutage(string hazard, string comment, int locationId, string callReason)
+        {
+            try
+            {
+                CallDto report = new CallDto();
+                report.Hazard = hazard;
+                report.Comment = comment;
+                report.LocationID = locationId;
+                report.CallReason = callReason;
+
+                ValidateCall(report);
+
+                _callService.Insert(report);
+
+                return true;
+            }
+            catch
+            {
+
+            }
+            return false;
+
+        }
     }
 }

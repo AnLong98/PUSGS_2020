@@ -8,5 +8,6 @@ namespace SmartEnergy.Contract.Interfaces
     public interface ILocationService
     {
         List<LocationDto> GetAllLocations();
+        public bool ChangePriorities(List<LocationDto> locations);
     }
 }

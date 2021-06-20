@@ -9,6 +9,7 @@ export class Consumer {
     locationID:number = 0;
     accountType:string="";
     location: Location;
+    phone:string="";
 
 }
 

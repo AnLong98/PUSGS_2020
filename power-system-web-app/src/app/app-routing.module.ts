@@ -47,6 +47,8 @@ import { WorkPlanBasicInformationComponent } from './documents/work-plans/work-p
 import { WorkPlanStateChangesComponent } from './documents/work-plans/work-plan-state-changes/work-plan-state-changes.component';
 import { IMultimediaService } from './shared/interfaces/multimedia-service';
 import { MultimediaAttachmentsComponent } from './multimedia/multimedia-attachments/multimedia-attachments.component';
+import { ConsumersComponent } from './consumers/consumers.component';
+import { ConsumerComponent } from './consumers/consumer/consumer.component';
 
 export const INCIDENT_SERVICE_TOKEN = new InjectionToken<IMultimediaService>("IncidentMultimedia"); 
 export const WORK_REQUEST_SERVICE_TOKEN = new InjectionToken<IMultimediaService>("WorkRequestMultimedia");
@@ -57,7 +59,26 @@ export const SAFETY_DOCUMENTS_SERVICE_TOKEN = new InjectionToken<IMultimediaServ
 const routes: Routes = [
   { path: 'register', component: RegistrationComponent,  outlet:"primary"  },
   { path: '', component: FrontPageComponent,  outlet:"front" },
-  { path: 'work-plans', component: WorkPlansComponent,  outlet:"primary" },
+  { path: 'work-plans', component: WorkPlansComponent,  outlet:"primary",
+    canActivate: [AuthGuardService, AuthGuardApprovedService],
+    data:{
+      roles: ['CREW_MEMBER', 'DISPATCHER', 'WORKER']
+    } 
+  },
+  { path: 'consumers', component: ConsumersComponent,
+    outlet:"primary",
+    canActivate: [AuthGuardService, AuthGuardApprovedService],
+    data:{
+      roles: ['ADMIN']
+    }
+  },
+  { path: 'consumer', component: ConsumerComponent,  pathMatch: 'full', outlet: "primary"},
+  { path: 'consumer/:id', component: ConsumerComponent, outlet: "primary",
+    canActivate: [AuthGuardService, AuthGuardApprovedService],
+    data:{
+      roles: ['ADMIN']
+    }
+  },
   { path: 'work-requests', component: WorkRequestsComponent,
     outlet:"primary",
     canActivate: [AuthGuardService, AuthGuardApprovedService],
@@ -173,30 +194,43 @@ const routes: Routes = [
     {
       path: 'basic-info',
       component: WorkPlanBasicInformationComponent, 
-      canActivate: [AuthGuardService, AuthGuardApprovedService]
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['DISPATCHER']
+      }
     },
     {
       path: 'basic-info/:id',
       component: WorkPlanBasicInformationComponent, 
-      canActivate: [AuthGuardService, AuthGuardApprovedService]
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['CREW_MEMBER', 'DISPATCHER']
+      }
     },
     {
-      path: 'multimedia',
+      path: 'multimedia/:id',
       component: MultimediaAttachmentsComponent, 
-      canActivate: [AuthGuardService, AuthGuardApprovedService]
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        requiredService: WORK_PLAN_SERVICE_TOKEN,
+        roles: ['CREW_MEMBER', 'DISPATCHER']
+      }
     },
     {
-      path: 'state-changes',
+      path: 'state-changes/:id',
       component: WorkPlanStateChangesComponent, 
-      canActivate: [AuthGuardService, AuthGuardApprovedService]
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['CREW_MEMBER', 'DISPATCHER']
+      }
     },
     {
-      path: 'equipment',
+      path: 'equipment/:id',
       component: WorkPlanEquipmentComponent,
       canActivate: [AuthGuardService, AuthGuardApprovedService]
     },
     {
-      path: 'switching-instructions',
+      path: 'switching-instructions/:id',
       component: WorkPlanSwitchingInstructionsComponent,
       canActivate: [AuthGuardService, AuthGuardApprovedService]
     },
@@ -344,18 +378,34 @@ const routes: Routes = [
     {
       path: 'icons',
       component: GlobalSettingsIconsComponent, 
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['ADMIN']
+      }
     },
     {
       path: 'notifications-documents',
       component: GlobalSettingsNotificationsDocumentsComponent, 
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['ADMIN']
+      }
     },
     {
       path: 'reset-default',
       component: GlobalSettingsResetDefaultComponent,
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['ADMIN']
+      }
     },
     {
       path: 'streets-priority',
       component: GlobalSettingsStreetsPriorityComponent,
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['ADMIN']
+      }
     },
   ],
 },

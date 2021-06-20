@@ -7,88 +7,60 @@
           
               <!-- ID Column -->
               <ng-container matColumnDef="action" sticky>
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                <th mat-header-cell *matHeaderCellDef></th>
                 <!--Change this-->
-                <td mat-cell *matCellDef="let row"><a class="clickable" [mat-dialog-close]="row.id"><mat-icon>note_add</mat-icon></a></td>
+                <td mat-cell *matCellDef="let row"><a class="clickable" [mat-dialog-close]="row"><mat-icon>note_add</mat-icon></a></td>
               </ng-container>
               
               <!-- Progress Column -->
-              <ng-container matColumnDef="id" sticky>
+              <ng-container matColumnDef="id">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-                <td mat-cell *matCellDef="let row"> {{row.id}}% </td>
+                <td mat-cell *matCellDef="let row"> {{row.id}} </td>
               </ng-container>
-              
-              <!-- Progress Column -->
-              <ng-container matColumnDef="type" sticky>
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
-                <td mat-cell *matCellDef="let row"> {{row.progress}}% </td>
-              </ng-container>
-          
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+              <td mat-cell *matCellDef="let row"> {{row.documentType}} </td>
+            </ng-container>
+
               <!-- Name Column -->
               <ng-container matColumnDef="status">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+                <td mat-cell *matCellDef="let row"> {{row.documentStatus}} </td>
               </ng-container>
-          
-              <!-- Color Column -->
+
               <ng-container matColumnDef="incident">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Incident </th>
-                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Incident ID </th>
+                <td mat-cell *matCellDef="let row"> {{row.incidentID}} </td>
               </ng-container>
-    
+
               <ng-container matColumnDef="street">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Street </th>
-                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+                <td mat-cell *matCellDef="let row"> {{row.street}} </td>
               </ng-container>
     
               <!-- Start Date collumn -->
-              <ng-container matColumnDef="startdate">
+              <ng-container matColumnDef="startDate">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Start date </th>
-                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
-              </ng-container>
-    
-              <!-- End Date collumn -->
-              <ng-container matColumnDef="enddate">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> End date </th>
-                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
-              </ng-container>
-    
-               <!-- End Date collumn -->
-               <ng-container matColumnDef="createdBy">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Created by</th>
-                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
-              </ng-container>
-    
-              <!-- Created by collumn -->
-              <ng-container matColumnDef="purpose">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Purpose </th>
-                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
-              </ng-container>
-    
-              <!-- End Date collumn -->
-              <ng-container matColumnDef="emergency">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Emergency </th>
-                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
-              </ng-container>
-    
-              <!-- Company collumn -->
-              <ng-container matColumnDef="company">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Company</th>
-                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+                <td mat-cell *matCellDef="let row"> {{display.getDateDisplay(row.startDate)}} </td>
               </ng-container>
     
               <!-- Phone no collumn -->
-              <ng-container matColumnDef="phoneNo">
+              <ng-container matColumnDef="phone">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone number</th>
-                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+                <td mat-cell *matCellDef="let row"> {{row.phone}} </td>
               </ng-container>
     
               <!-- Creation date collumn -->
               <ng-container matColumnDef="createdOn">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Created on</th>
-                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+                <td mat-cell *matCellDef="let row"> {{display.getDateDisplay(row.createdOn)}} </td>
               </ng-container>
 
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">No data to display</td>
+              </tr>
           
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

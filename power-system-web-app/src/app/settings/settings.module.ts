@@ -21,6 +21,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { GlobalSettingsResetDefaultComponent } from './global-settings-reset-default/global-settings-reset-default.component';
 import { GlobalSettingsIconsComponent } from './global-settings-icons/global-settings-icons.component';
+import {MatSliderModule} from '@angular/material/slider';
 
 
 
@@ -54,7 +55,8 @@ import { GlobalSettingsIconsComponent } from './global-settings-icons/global-set
     MatPaginatorModule,
     MatCheckboxModule,
     MatCardModule,
-    FormsModule
+    FormsModule,
+    MatSliderModule
 
   ]
 })

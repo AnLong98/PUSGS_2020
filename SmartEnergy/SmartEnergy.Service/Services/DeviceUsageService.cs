@@ -60,6 +60,20 @@ namespace SmartEnergy.Service.Services
 
             _dbContext.SaveChanges();
         }
+        public void CopyWorkRequestDevicesToWorkPlan(int workRequestID, int workPlanID)
+        {
+            WorkPlan wp = _dbContext.WorkPlans.Find(workPlanID);
+            if (wp == null)
+                throw new WorkPlanNotFoundException($"Work plan with ID {workPlanID} does not exist");
+            List<DeviceUsage> usages = _dbContext.DeviceUsages.Where(x => x.WorkRequestID == workRequestID).ToList();
+
+            foreach (DeviceUsage deviceUsage in usages)
+            {
+                deviceUsage.WorkPlanID = workPlanID;
+            }
+
+            _dbContext.SaveChanges();
+        }
 
         public void Delete(int id)
         {

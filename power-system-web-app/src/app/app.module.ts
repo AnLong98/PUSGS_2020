@@ -2,6 +2,7 @@ import { SafetyDocumentService } from './services/safety-document.service';
 import { IncidentService } from 'app/services/incident.service';
 import { ErrorInterceptorService } from './services/error-interceptor.service';
 import { AuthGuardService } from './auth/auth-guard.service';
+import { WorkPlanService } from './services/work-plan.service';
 
 import { WorkRequestService } from './services/work-request.service';
 import { SettingsModule } from './settings/settings.module';
@@ -12,7 +13,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { NavigationModule } from './navigation/navigation.module';
 import {  NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule, WORK_REQUEST_SERVICE_TOKEN, INCIDENT_SERVICE_TOKEN, SAFETY_DOCUMENTS_SERVICE_TOKEN } from './app-routing.module';
+import { AppRoutingModule, WORK_REQUEST_SERVICE_TOKEN, INCIDENT_SERVICE_TOKEN, SAFETY_DOCUMENTS_SERVICE_TOKEN, WORK_PLAN_SERVICE_TOKEN } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DatePipe } from '@angular/common';
 import { FrontModule } from './front/front.module';
@@ -29,6 +30,7 @@ import {
   FacebookLoginProvider
 } from 'angularx-social-login';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ConsumersModule } from './consumers/consumers.module';
 
 
 export function tokenGetter() {
@@ -37,7 +39,7 @@ export function tokenGetter() {
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -55,6 +57,7 @@ export function tokenGetter() {
     DevicesModule,
     SocialLoginModule,
     BrowserAnimationsModule,
+    ConsumersModule,
     ToastrModule.forRoot(),
     JwtModule.forRoot({
       config: {
@@ -83,6 +86,10 @@ export function tokenGetter() {
     {
       provide: SAFETY_DOCUMENTS_SERVICE_TOKEN,
       useClass: SafetyDocumentService
+      },
+    {
+      provide: WORK_PLAN_SERVICE_TOKEN,
+      useClass: WorkPlanService
       }
    /*Define other services here*/
    ,

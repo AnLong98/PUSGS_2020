@@ -31,5 +31,19 @@ namespace SmartEnergyDomainModels
         public List<Instruction> Instructions { get; set; }
         public List<SafetyDocument> SafetyDocuments { get; set; }
         public List<DeviceUsage> WorkPlanDevices { get; set; }
+
+        public void Update(WorkPlan newData)
+        {
+            StartDate = newData.StartDate;
+            EndDate = newData.EndDate;
+            Purpose = newData.Purpose;
+            Notes = newData.Notes;
+            CompanyName = newData.CompanyName;
+            Phone = newData.Phone;
+            Street = newData.Street;
+            DocumentType = newData.DocumentType;
+            WorkRequestID = newData.WorkRequestID;
+        }
+
     }
 }

@@ -224,7 +224,16 @@ namespace SmartEnergy.Service.Services
 
         public UserDto Update(UserDto entity)
         {
-            throw new NotImplementedException();
+            User updatedUser = _mapper.Map<User>(entity);
+            User oldUser = _dbContext.Users.FirstOrDefault(x => x.ID.Equals(updatedUser.ID));
+
+            if (oldUser == null)
+                throw new UserNotFoundException($"User with Id = {updatedUser.ID} does not exists!");
+
+            oldUser.UpdateUser(updatedUser);
+            _dbContext.SaveChanges();
+
+            return _mapper.Map<UserDto>(oldUser);
         }
 
         private IQueryable<User> FilterUsersByStatus(IQueryable<User> users, UserStatusFilter status)
@@ -324,6 +333,29 @@ namespace SmartEnergy.Service.Services
             }
 
             return users;
+        }
+
+        public bool ChangePassword(int id, string oldPassword, string newPassword)
+        {
+            User user = _dbContext.Users.Find(id);
+            if (user == null)
+                throw new UserNotFoundException($"User does not exist.");
+
+            if (BCrypt.Net.BCrypt.Verify(oldPassword, user.Password))
+            {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
+
+                _dbContext.SaveChanges();
+
+                return true;
+            }
+            else
+            {
+
+                throw new InvalidUserDataException($"Incorrect password.");
+                return false;
+            }
+
         }
     }
 

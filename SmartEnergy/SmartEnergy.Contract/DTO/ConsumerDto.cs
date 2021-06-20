@@ -11,8 +11,9 @@ namespace SmartEnergy.Contract.DTO
         public string Lastname { get; set; }
         public string AccountID { get; set; }         
         public int LocationID { get; set; }
+        public string Phone { get; set; }
 
-        public LocationDto Location { get; set; }
+        public LocationDto? Location { get; set; }
         public string AccountType { get; set; }
     }
 }

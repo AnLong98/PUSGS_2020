@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using AutoMapper;
+using SmartEnergyDomainModels;
+using SmartEnergy.Contract.CustomExceptions.Location;
 
 namespace SmartEnergy.Service.Services
 {
@@ -25,6 +27,25 @@ namespace SmartEnergy.Service.Services
             return _mapper.Map<List<LocationDto>>(_dbContext.Location.ToList());
         }
 
-      
+        public bool ChangePriorities(List<LocationDto> locations)
+        {
+            foreach(LocationDto loc in locations)
+            {
+                Location l = _dbContext.Location.Find(loc.ID);
+
+                if (l == null)
+                {
+                    throw new LocationNotFoundException($"Location with {loc.ID} Id does not exists.");
+                }
+
+                l.UpdateLocation(_mapper.Map<Location>(loc));
+
+                _dbContext.SaveChanges();
+
+            }
+
+            return true;
+
+        }
     }
 }

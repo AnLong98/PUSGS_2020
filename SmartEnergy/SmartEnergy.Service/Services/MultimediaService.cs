@@ -7,6 +7,7 @@ using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.CustomExceptions.SafetyDocument;
+using SmartEnergy.Contract.CustomExceptions.WorkPlan;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Enums;
@@ -102,7 +103,7 @@ namespace SmartEnergy.Service.Services
 
         public async Task AttachFileToWorkRequestAsync(IFormFile formFile, int workRequestId)
         {
-            await ScanAttachmentAsync(formFile);
+            //await ScanAttachmentAsync(formFile);
             WorkRequest wr = _dbContext.WorkRequests.Find(workRequestId);
 
             if (wr == null)
@@ -134,9 +135,42 @@ namespace SmartEnergy.Service.Services
 
         }
 
+        public async Task AttachFileToWorkPlanAsync(IFormFile formFile, int workPlanId)
+        {
+            //await ScanAttachmentAsync(formFile);
+            WorkPlan wr = _dbContext.WorkPlans.Find(workPlanId);
+
+            if (wr == null)
+                throw new WorkPlanNotFoundException($"Work plan with id {workPlanId} does not exist.");
+
+            if (wr.DocumentStatus == DocumentStatus.APPROVED || wr.DocumentStatus == DocumentStatus.CANCELLED)
+                throw new WorkPlanInvalidStateException($"Cannot attach to this work plan as it is already {wr.DocumentStatus}");
+
+            string filePath = Path.Combine(@$"Attachments/WP{workPlanId}/", formFile.FileName);
+            if (_dbContext.MultimediaAttachments.FirstOrDefault(x => x.MultimediaAnchorID == wr.MultimediaAnchorID
+                                                                && x.Url == formFile.FileName) != null)
+            {
+                throw new MultimediaAlreadyExists($"Attachment with name {formFile.FileName} is already attached to this work plan.");
+            }
+            new FileInfo(filePath).Directory?.Create();
+            using (FileStream stream = new FileStream(filePath, FileMode.Create))
+            {
+                formFile.CopyTo(stream);
+
+            }
+
+            MultimediaAttachment attachment = new MultimediaAttachment();
+            attachment.Url = formFile.FileName;
+            attachment.MultimediaAnchorID = (int)wr.MultimediaAnchorID;
+            _dbContext.MultimediaAttachments.Add(attachment);
+
+            _dbContext.SaveChanges();
+
+        }
+
         public async Task AttachUserAvatar(IFormFile formFile, int userId)
         {
-            await ScanAttachmentAsync(formFile);
+            //await ScanAttachmentAsync(formFile);
 
             User user = _dbContext.Users.Find(userId);
 
@@ -147,10 +181,10 @@ namespace SmartEnergy.Service.Services
                 throw new UserNotFoundException($"User with ID {userId} does not exist.");
 
             string filePath = Path.Combine(@$"Attachments/Users/User{userId}/", formFile.FileName);
-            if(Directory.Exists(@$"Attachments/Users/User{userId}"))
+           /* if(Directory.Exists(@$"Attachments/Users/User{userId}"))
             {
                 Directory.Delete(@$"Attachments/Users/User{userId}");
-            }
+            }*/
 
             new FileInfo(filePath).Directory?.Create();
             using (FileStream stream = new FileStream(filePath, FileMode.Create))
@@ -229,6 +263,40 @@ namespace SmartEnergy.Service.Services
             {
                 File.Delete(@$"Attachments/SD{safetyDocID}/{filePath}");
             }
+        }
+       
+        public void DeleteWorkPlanAttachment(int workPlanId, string filename)
+        {
+            WorkPlan wr = _dbContext.WorkPlans.Find(workPlanId);
+
+            if (wr == null)
+                throw new WorkPlanNotFoundException($"Work plan with id {workPlanId} does not exist.");
+
+
+            MultimediaAttachment attachment = _dbContext.MultimediaAttachments.FirstOrDefault(x => x.MultimediaAnchorID == wr.MultimediaAnchorID
+                                                                                                && x.Url == filename);
+
+            if (attachment == null)
+                throw new MultimediaNotFoundException($"Work plan with ID {workPlanId} does not contain file with name {filename}");
+
+            _dbContext.MultimediaAttachments.Remove(attachment);
+
+            if (File.Exists(@$"Attachments/WP{workPlanId}/{filename}"))
+            {
+                File.Delete(@$"Attachments/WP{workPlanId}/{filename}");
+            }
+
+            _dbContext.SaveChanges();
+        }
+
+        public void DeleteWorkPlanFileOnDisk(int workPlanID, string filePath)
+        {
+
+            if (File.Exists(@$"Attachments/WP{workPlanID}/{filePath}"))
+            {
+                File.Delete(@$"Attachments/WP{workPlanID}/{filePath}");
+            }
+
         }
 
         public void DeleteWorkRequestAttachment(int workRequestId, string filename)
@@ -316,6 +384,31 @@ namespace SmartEnergy.Service.Services
             return stream;
         }
 
+        public List<MultimediaAttachmentDto> GetWorkPlanAttachments(int workPlanId)
+        {
+            WorkPlan wr = _dbContext.WorkPlans.Include(x => x.MultimediaAnchor)
+                                                           .ThenInclude(x => x.MultimediaAttachments)
+                                                           .FirstOrDefault(x => x.ID == workPlanId);
+            if (wr == null)
+                throw new WorkPlanNotFoundException($"Work plan with id {workPlanId} does not exist");
+
+            return _mapper.Map<List<MultimediaAttachmentDto>>(wr.MultimediaAnchor.MultimediaAttachments);
+        }
+        
+        public FileStream GetWorkPlanAttachmentStream(int workPlanId, string fileName)
+        {
+            WorkPlan wr = _dbContext.WorkPlans.Find(workPlanId);
+            if (wr == null)
+                throw new WorkRequestNotFound($"Work plan with id {workPlanId} does not exist.");
+
+            MultimediaAttachment attachment = _dbContext.MultimediaAttachments.Where(x => x.MultimediaAnchorID == wr.MultimediaAnchorID &&
+                                                                                     x.Url == fileName).FirstOrDefault();
+            if (attachment == null)
+                throw new MultimediaNotFoundException($"Multimedia attachment with name {fileName} does not exist.");
+            FileStream stream = new FileStream(@$"Attachments/WP{workPlanId}/{fileName}", FileMode.Open);
+            return stream;
+        }
+
         public FileStream GetUserAvatarStream(int userId, string imageURL)
         {
             User user = _dbContext.Users.Find(userId);
@@ -339,7 +432,6 @@ namespace SmartEnergy.Service.Services
 
             return _mapper.Map<List<MultimediaAttachmentDto>>(wr.MultimediaAnchor.MultimediaAttachments);
         }
-
 
         public FileStream GetWorkRequestAttachmentStream(int workRequestId, string fileName)
         {

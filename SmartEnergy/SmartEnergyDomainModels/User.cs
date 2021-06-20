@@ -29,6 +29,14 @@ namespace SmartEnergyDomainModels
         public List<WorkPlan> WorkPlans { get; set; }
         public List<Notification> Notifications { get; set; }
         public UserStatus UserStatus { get; set; }
-
+        public void UpdateUser(User modified)
+        {
+            Name = modified.Name;
+            Lastname = modified.Lastname;
+            Username = modified.Username;
+            Email = modified.Email;
+            UserType = modified.UserType;
+            //ImageURL = modified.ImageURL;
+        }
     }
 }

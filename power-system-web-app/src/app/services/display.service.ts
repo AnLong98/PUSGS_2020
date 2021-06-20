@@ -49,4 +49,12 @@ export class DisplayService {
   getAddressDisplay(location:Location){
     return `${location.street} ${location.number}, ${location.city}`;
   }
+
+  getInstructionStateDisplay(bool:boolean)
+  {
+     if(bool)
+      return "EXECUTED";
+
+      return "UNEXECUTED";
+  }
 }

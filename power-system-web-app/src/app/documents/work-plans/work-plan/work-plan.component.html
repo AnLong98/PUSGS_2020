@@ -6,7 +6,8 @@
             [routerLink]="link.path"
             routerLinkActive #rla="routerLinkActive"
             [routerLinkActiveOptions]="{exact:true}"
-            [active]="rla.isActive"> {{ link.label }} </a>
+            [active]="rla.isActive"
+            [disabled] = 'link.isDisabled'> {{ link.label }} </a>
         </nav>
         <router-outlet></router-outlet>
     </div>
