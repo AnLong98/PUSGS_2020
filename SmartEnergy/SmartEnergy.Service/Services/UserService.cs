@@ -173,6 +173,8 @@ namespace SmartEnergy.Service.Services
 
             string tokenString = _authHelperService.CreateToken(_mapper.Map<UserDto>(user));
             userData = _mapper.Map<UserDto>(user).StripConfidentialData();
+
+
             return tokenString;
         }
 

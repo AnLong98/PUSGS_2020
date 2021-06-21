@@ -4,40 +4,40 @@
         <div class="col-3">
             <div class="notifications-nav-menu">
                 <mat-selection-list [multiple]="false">
-                    <mat-list-option>
+                    <mat-list-option (click)="showNotifications('ALL')">
                         <div class="flex-row">
                             All Notifications
                         </div>
                     </mat-list-option>
 
-                    <mat-list-option>
+                    <mat-list-option (click)="showNotifications('UNREAD')">
                         <div class="flex-row">
                             Unread Notifications
                         </div>
                     </mat-list-option>
 
-                    <mat-list-option>
+                    <mat-list-option (click)="showNotifications('SUCCESS')">
                         <div class="flex-row">
                             Success&nbsp;&nbsp;&nbsp;
                             <mat-icon class="icon-success">check_circle</mat-icon>
                         </div>
                     </mat-list-option>
 
-                    <mat-list-option>
+                    <mat-list-option (click)="showNotifications('ERROR')">
                         <div class="flex-row"> 
                             Errors&nbsp;&nbsp;&nbsp;
                             <mat-icon class="icon-error">cancel</mat-icon>
                         </div>
                     </mat-list-option>
 
-                    <mat-list-option>
+                    <mat-list-option (click)="showNotifications('WARNING')">
                         <div class="flex-row">
                             Warnings&nbsp;&nbsp;&nbsp;
                             <mat-icon class="icon-warning">warning</mat-icon>
                         </div>
                     </mat-list-option>
 
-                    <mat-list-option>
+                    <mat-list-option (click)="showNotifications('INFO')">
                         <div class="flex-row">
                             Info&nbsp;&nbsp;&nbsp;
                             <mat-icon class="icon-info">info</mat-icon>
@@ -52,11 +52,9 @@
             <div class="notifications-div">
                 <div *ngFor="let date of dates" class="notification-by-date-div">
                     <div class="date">{{date}}</div>
-                   <!-- <p-messages [(value)]="msgs1" [enableService]="false" [closable]="false"></p-messages>-->
-                   <app-notification [notificationType]="'error'"></app-notification>
-                   <app-notification [notificationType]="'info'"></app-notification>
-                   <app-notification [notificationType]="'warning'"></app-notification>
-                   <app-notification [notificationType]="'success'"></app-notification>
+                    <div *ngFor="let notification of notifications">
+                        <app-notification [notification]="notification" [notificationType]="notification.notificationType"></app-notification>
+                    </div>
                 </div>
                 <p-messages severity="info">
                     <ng-template pTemplate>
@@ -68,7 +66,7 @@
             </div>
             <div class="buttons-div">
                 <button class="button-add notif-button">Mark all as read</button>
-                <button class="button-add notif-button">Clear all</button>
+                <button class="button-add notif-button" (click)="deleteAll()">Clear all</button>
             </div>
             <p-messages severity="info">
                     <span class="custom-message">I am the one who knocks.</span>

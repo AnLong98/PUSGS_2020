@@ -23,6 +23,14 @@ namespace SmartEnergyAPI.Mapping
             CreateMap<CrewDto, Crew>();
             CreateMap<Crew, CrewDto>();
 
+            CreateMap<NotificationDto, Notification>()
+                .ForMember(mem => mem.NotificationType, op => op.MapFrom(o => o.NotificationType))
+                .ForMember(mem => mem.NotificationType, op => op.MapFrom(o => o.NotificationType));
+
+            CreateMap<Notification, NotificationDto>()
+                .ForMember(mem => mem.NotificationType, op => op.MapFrom(o => o.NotificationType))
+                .ForMember(mem => mem.NotificationType, op => op.MapFrom(o => o.NotificationType));
+
             CreateMap<UserDto, User>()
                 .ForMember(mem => mem.UserStatus, op => op.MapFrom(o => o.UserStatus))
                 .ForMember(mem => mem.UserType, op => op.MapFrom(o => o.UserType)); 

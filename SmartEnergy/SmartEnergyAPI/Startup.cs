@@ -110,6 +110,7 @@ namespace SmartEnergyAPI
             services.AddScoped<IConsumerService, ConsumerService>();
             services.AddScoped<ISafetyDocumentService, SafetyDocumentService>();
             services.AddScoped<IWorkPlanService, WorkPlanService>();
+            services.AddScoped<INotificationService, NotificationService>();
 
 
         }

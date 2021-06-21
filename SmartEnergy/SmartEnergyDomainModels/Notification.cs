@@ -14,8 +14,13 @@ namespace SmartEnergyDomainModels
         public DateTime Timestamp { get; set; }
         public bool IsRead { get; set; }
         public int UserID { get; set; }
-        public int NotificationAnchorID { get; set; }
+        public int? NotificationAnchorID { get; set; }
         public User User { get; set; }
-        public NotificationAnchor NotificationAnchor { get; set; }
+        public NotificationAnchor? NotificationAnchor { get; set; }
+
+        public void Update(Notification old)
+        {
+            IsRead = old.IsRead;
+        }
     }
 }

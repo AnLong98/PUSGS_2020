@@ -16,6 +16,13 @@ export class EditProfileComponent implements OnInit {
 
   @Input()
   accountStatus: string;
+  roles: any[] =
+  [
+    {display:'CREW_MEMBER', value: 'CREW_MEMBER'},
+    {display:'DISPATCHER', value: 'DISPATCHER'},
+    {display:'WORKER', value: 'WORKER'},
+    {display:'CONSUMER', value: 'CONSUMER'}
+  ];
 
   newUser: User = new User();
   editUserForm = new FormGroup({
@@ -49,7 +56,7 @@ export class EditProfileComponent implements OnInit {
     this.editUserForm.controls['lastname'].setValue(this.user.lastname);
     this.editUserForm.controls['username'].setValue(this.user.username);
     this.editUserForm.controls['email'].setValue(this.user.email);
-    //this.editUserForm.controls['name'].setValue(this.user.name);
+    this.editUserForm.controls['role'].setValue(this.user.userType);
   }
 
   onSelectImage(event:Event)

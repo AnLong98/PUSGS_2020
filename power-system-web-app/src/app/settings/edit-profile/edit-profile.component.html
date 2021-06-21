@@ -74,10 +74,7 @@
                                     <mat-form-field [hidden] = "user.userType === 'ADMIN'" class="example-full-width" appearance="fill">
                                         <mat-label>Role</mat-label>
                                         <mat-select formControlName="role">
-                                            <mat-option value="CREW_MEMBER">Crew member</mat-option>
-                                            <mat-option value="DISPATCHER">Dispatcher</mat-option>
-                                            <mat-option value="WORKER">Worker</mat-option>
-                                            <mat-option value="CONSUMER">Consumer</mat-option>
+                                            <mat-option *ngFor="let role of roles" value="{{role.value}}">{{role.display}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>

@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { DisplayService } from 'app/services/display.service';
+import { Notification } from 'app/shared/models/notification.model';
 
 @Component({
   selector: 'app-notification',
@@ -7,12 +9,13 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class NotificationComponent implements OnInit {
 
-  @Input()
-  notificationType: string;
+  @Input() notificationType: string;
+  @Input() notification:Notification;
 
-  constructor() { }
+  constructor(public display:DisplayService) { }
 
   ngOnInit(): void {
+    console.log("Tip je:" + this.notificationType)
   }
 
 }

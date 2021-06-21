@@ -27,6 +27,11 @@ export class DisplayService {
     return this.datePipe.transform(date, "M/d/yy, h:mm a");
   }
 
+  getTimeStampDisplay(date:Date)
+  {
+    return this.datePipe.transform(date, "MM/dd/yyyy, h:mm a");
+  }
+
   getTimeDisplayIncidentETR(dateETR: string)
   {
 
