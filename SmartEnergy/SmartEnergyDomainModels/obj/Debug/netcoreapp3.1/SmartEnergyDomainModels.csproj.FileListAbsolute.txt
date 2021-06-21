@@ -34,3 +34,15 @@ C:\Users\stefa\Desktop\ProjekatWeb\PUSGS_2020\SmartEnergy\SmartEnergyDomainModel
 C:\Users\stefa\Desktop\ProjekatWeb\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\Debug\netcoreapp3.1\SmartEnergyDomainModels.csproj.CopyComplete
 C:\Users\stefa\Desktop\ProjekatWeb\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\Debug\netcoreapp3.1\SmartEnergyDomainModels.dll
 C:\Users\stefa\Desktop\ProjekatWeb\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\Debug\netcoreapp3.1\SmartEnergyDomainModels.pdb
+C:\Users\HP\Desktop\PUSGS2021\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\bin\Debug\netcoreapp3.1\SmartEnergyDomainModels.deps.json
+C:\Users\HP\Desktop\PUSGS2021\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\bin\Debug\netcoreapp3.1\SmartEnergyDomainModels.dll
+C:\Users\HP\Desktop\PUSGS2021\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\bin\Debug\netcoreapp3.1\SmartEnergyDomainModels.pdb
+C:\Users\HP\Desktop\PUSGS2021\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.dll
+C:\Users\HP\Desktop\PUSGS2021\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.pdb
+C:\Users\HP\Desktop\PUSGS2021\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\Debug\netcoreapp3.1\SmartEnergyDomainModels.csproj.AssemblyReference.cache
+C:\Users\HP\Desktop\PUSGS2021\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\Debug\netcoreapp3.1\SmartEnergyDomainModels.AssemblyInfoInputs.cache
+C:\Users\HP\Desktop\PUSGS2021\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\Debug\netcoreapp3.1\SmartEnergyDomainModels.AssemblyInfo.cs
+C:\Users\HP\Desktop\PUSGS2021\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\Debug\netcoreapp3.1\SmartEnergyDomainModels.csproj.CoreCompileInputs.cache
+C:\Users\HP\Desktop\PUSGS2021\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\Debug\netcoreapp3.1\SmartEnergyDomainModels.csproj.CopyComplete
+C:\Users\HP\Desktop\PUSGS2021\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\Debug\netcoreapp3.1\SmartEnergyDomainModels.dll
+C:\Users\HP\Desktop\PUSGS2021\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\Debug\netcoreapp3.1\SmartEnergyDomainModels.pdb

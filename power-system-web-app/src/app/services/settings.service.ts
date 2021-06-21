@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Icon } from 'app/shared/models/icon.model';
 import { Settings } from 'app/shared/models/settings.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
@@ -24,5 +25,10 @@ export class SettingsService {
   resetSettings():Observable<{}>{
     let requestUrl = environment.serverURL.concat(`settings`);
     return this.http.delete<Settings>(requestUrl);
+  }
+
+  getAllIcons():Observable<Icon[]>{
+    let requestUrl = environment.serverURL.concat("settings/icons");
+    return this.http.get<Icon[]>(requestUrl);
   }
 }

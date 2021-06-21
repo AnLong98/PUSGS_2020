@@ -48,7 +48,7 @@ export class GlobalSettingsStreetsPriorityComponent implements OnInit {
       error => {
         this.toastr.error(error.error);
       }
-    )
+    );
   }
 
   onSubmit()

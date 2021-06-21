@@ -77,6 +77,7 @@ namespace SmartEnergy.Service.Services
 
             Notification not = _mapper.Map<Notification>(entity);
             not.ID = 0;
+            not.NotificationAnchorID = 1;
             not.NotificationAnchor = nAnchor;
 
             _dbContext.Notifications.Add(not);

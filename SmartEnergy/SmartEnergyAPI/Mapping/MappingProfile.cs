@@ -15,9 +15,9 @@ namespace SmartEnergyAPI.Mapping
         {
 
             CreateMap<Icon, IconDto>();
-            CreateMap<Settings, SettingsDto>();
-
             CreateMap<IconDto, Icon>();
+
+            CreateMap<Settings, SettingsDto>();
             CreateMap<SettingsDto, Settings>();
 
             CreateMap<CrewDto, Crew>();

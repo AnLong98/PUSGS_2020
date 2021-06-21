@@ -6663,25 +6663,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\stefa\\.nuget\\packages\\": {},
+    "C:\\Users\\HP\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\stefa\\Desktop\\ProjekatWeb\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\SmartEnergyAPI.csproj",
+      "projectUniqueName": "C:\\Users\\HP\\Desktop\\PUSGS2021\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\SmartEnergyAPI.csproj",
       "projectName": "SmartEnergyAPI",
-      "projectPath": "C:\\Users\\stefa\\Desktop\\ProjekatWeb\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\SmartEnergyAPI.csproj",
-      "packagesPath": "C:\\Users\\stefa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\stefa\\Desktop\\ProjekatWeb\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\obj\\",
+      "projectPath": "C:\\Users\\HP\\Desktop\\PUSGS2021\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\SmartEnergyAPI.csproj",
+      "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\HP\\Desktop\\PUSGS2021\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\stefa\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -6696,14 +6696,14 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\stefa\\Desktop\\ProjekatWeb\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Contract\\SmartEnergy.Contract.csproj": {
-              "projectPath": "C:\\Users\\stefa\\Desktop\\ProjekatWeb\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Contract\\SmartEnergy.Contract.csproj"
+            "C:\\Users\\HP\\Desktop\\PUSGS2021\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Contract\\SmartEnergy.Contract.csproj": {
+              "projectPath": "C:\\Users\\HP\\Desktop\\PUSGS2021\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Contract\\SmartEnergy.Contract.csproj"
             },
-            "C:\\Users\\stefa\\Desktop\\ProjekatWeb\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\stefa\\Desktop\\ProjekatWeb\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj"
+            "C:\\Users\\HP\\Desktop\\PUSGS2021\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\HP\\Desktop\\PUSGS2021\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj"
             },
-            "C:\\Users\\stefa\\Desktop\\ProjekatWeb\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Service\\SmartEnergy.Service.csproj": {
-              "projectPath": "C:\\Users\\stefa\\Desktop\\ProjekatWeb\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Service\\SmartEnergy.Service.csproj"
+            "C:\\Users\\HP\\Desktop\\PUSGS2021\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Service\\SmartEnergy.Service.csproj": {
+              "projectPath": "C:\\Users\\HP\\Desktop\\PUSGS2021\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Service\\SmartEnergy.Service.csproj"
             }
           }
         }
@@ -6767,7 +6767,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.300\\RuntimeIdentifierGraph.json"
       }
     }
   }

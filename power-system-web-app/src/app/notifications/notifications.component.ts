@@ -68,7 +68,7 @@ export class NotificationsComponent implements OnInit {
     }
     else if(notificationType === "UNREAD")
     {
-      this.notifications = this.shownNotifications.filter(i=> i.notificationType == notificationType);
+      this.notifications = this.shownNotifications.filter(i=> i.isRead == false);
     }
     else if(notificationType === "ERROR")
     {

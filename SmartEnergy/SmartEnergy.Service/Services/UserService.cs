@@ -28,14 +28,16 @@ namespace SmartEnergy.Service.Services
         private readonly IMailService _mailService;
         private readonly IMapper _mapper;
         private readonly IAuthHelperService _authHelperService;
+        private readonly INotificationService _notificationService;
 
-        public UserService(SmartEnergyDbContext dbContext, IConfiguration configuration, IMailService mailService, IMapper mapper, IAuthHelperService authHelperService)
+        public UserService(SmartEnergyDbContext dbContext, IConfiguration configuration, IMailService mailService, IMapper mapper, IAuthHelperService authHelperService, INotificationService notificationService)
         {
             _dbContext = dbContext;
             _configuration = configuration;
             _mailService = mailService;
             _mapper = mapper;
             _authHelperService = authHelperService;
+            _notificationService = notificationService;
         }
 
         public UserDto ApproveUser(int userId)
@@ -173,7 +175,6 @@ namespace SmartEnergy.Service.Services
 
             string tokenString = _authHelperService.CreateToken(_mapper.Map<UserDto>(user));
             userData = _mapper.Map<UserDto>(user).StripConfidentialData();
-
 
             return tokenString;
         }
